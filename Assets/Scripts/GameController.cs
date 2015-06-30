@@ -33,6 +33,10 @@ public class GameController : MonoBehaviour {
 
     float worldradius = 1000;
 
+    float WeightedRandom(float min, float max, float power)
+    {
+        return Mathf.Pow(Random.value, power) * (max - min) + min;
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -70,7 +74,7 @@ public class GameController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
             newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-50f, 50f), Random.Range(-50f, 50f));
-            newjunk.GetComponent<Rigidbody2D>().mass = Random.Range(0, 400f);
+            newjunk.GetComponent<Rigidbody2D>().mass = WeightedRandom(0, 400, 4);
 
             newjunk.transform.localScale = new Vector3(Mathf.Sqrt(newjunk.GetComponent<Rigidbody2D>().mass),Mathf.Sqrt(newjunk.GetComponent<Rigidbody2D>().mass),1);
         }
@@ -111,8 +115,8 @@ public class GameController : MonoBehaviour {
         //player.gameObject.transform.localScale = new Vector3(Mathf.Sqrt(playermass + carriedmass), Mathf.Sqrt(playermass + carriedmass), 1);
         //junkcollector.transform.localScale = new Vector3(Mathf.Sqrt(playermass + carriedmass), Mathf.Sqrt(playermass + carriedmass), 1);
 
-        //massslider.value = player.mass / (playermass + maxcarriedmass);
-        //healthslider.value = health;
+        massslider.value = playerSaucerController.mass / playerSaucerController.maxMass;
+        healthslider.value = playerSaucerController.health;
 
         transform.position = player.position;
         transform.localScale = player.gameObject.transform.localScale;

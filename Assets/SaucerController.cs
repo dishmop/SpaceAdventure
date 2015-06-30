@@ -2,9 +2,9 @@
 using System.Collections;
 
 public class SaucerController : MonoBehaviour {
-    float saucermass;
-    float carriedmass = 20;
-    float maxcarriedmass = 50;
+    public float saucermass;
+    public float carriedmass = 20;
+    public float maxcarriedmass = 50;
 
     public GameController controller;
     public GameObject junk;
@@ -21,7 +21,17 @@ public class SaucerController : MonoBehaviour {
     Vector3 localtractorpos;
     GameObject tractedobj = null;
 
-    float health = 1.0f;
+    public float health = 1.0f;
+
+    public float maxMass
+    {
+        get { return saucermass + maxcarriedmass; }
+    }
+
+    public float mass
+    {
+        get { return saucermass + carriedmass; }
+    }
 
 
 	// Use this for initialization
@@ -33,8 +43,8 @@ public class SaucerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        rb.mass = saucermass + carriedmass;
-        transform.localScale = new Vector3(Mathf.Sqrt(rb.mass), Mathf.Sqrt(rb.mass), 1);
+        rb.mass = mass;
+        transform.localScale = new Vector3(Mathf.Sqrt(mass), Mathf.Sqrt(mass), 1);
 	}
 
     void OnTriggerEnter2D(Collider2D other)
@@ -43,6 +53,14 @@ public class SaucerController : MonoBehaviour {
         {
             Collect(other.gameObject);
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        Vector2 relvel = rb.velocity - coll.collider.attachedRigidbody.velocity;
+        Vector2 impulse = relvel * coll.collider.attachedRigidbody.mass;
+
+        health -= impulse.magnitude/10000;
     }
 
     public void Collect(GameObject junk)
@@ -94,6 +112,7 @@ public class SaucerController : MonoBehaviour {
                 Vector3 position = tractedobj.transform.TransformPoint(localtractorpos);
                 Vector3 offset = position - arm.transform.position;
 
+                position.z += 10;
                 partsys.gameObject.transform.position = position;
                 partsys.gameObject.transform.LookAt(arm.transform);
                 partsys.startLifetime = offset.magnitude / partsys.startSpeed;
@@ -109,10 +128,15 @@ public class SaucerController : MonoBehaviour {
                 rb.AddForce(force * direction);
             }
             else
-                if (Input.GetKey(KeyCode.Mouse1) && mouseoffset.magnitude < tractorrange)
+                if (mouseoffset.magnitude < tractorrange)
                 {
                     partsys.gameObject.SetActive(true);
-                    partsys.gameObject.transform.position = location;
+
+                    Vector3 pos = location;
+                    pos.z += 10;
+
+                    partsys.gameObject.transform.position = pos;
+
                     partsys.gameObject.transform.LookAt(arm.transform);
                     partsys.startLifetime = mouseoffset.magnitude / partsys.startSpeed;
                     partsys.startColor = Color.white;
@@ -126,6 +150,11 @@ public class SaucerController : MonoBehaviour {
                         tractedobj = hitinfo.rigidbody.gameObject;
                     }
 
+                }
+                else
+                {
+                    tractedobj = null;
+                    partsys.gameObject.SetActive(false);
                 }
         }else
         {

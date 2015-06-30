@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.SpaceAdventure.CSharp.Plugins", "UnityVS.SpaceAdventure.CSharp.Plugins.csproj", "{836DE95D-3964-05DB-E439-D2BF7827A9B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.SpaceAdventure.CSharp", "UnityVS.SpaceAdventure.CSharp.csproj", "{BDE15037-1C4C-D791-6ED8-6C744F58E485}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.SpaceAdventure.CSharp.Editor", "UnityVS.SpaceAdventure.CSharp.Editor.csproj", "{C844642E-44C8-88E8-F592-D45DEDB55B54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{836DE95D-3964-05DB-E439-D2BF7827A9B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{836DE95D-3964-05DB-E439-D2BF7827A9B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{836DE95D-3964-05DB-E439-D2BF7827A9B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{836DE95D-3964-05DB-E439-D2BF7827A9B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE15037-1C4C-D791-6ED8-6C744F58E485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE15037-1C4C-D791-6ED8-6C744F58E485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE15037-1C4C-D791-6ED8-6C744F58E485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE15037-1C4C-D791-6ED8-6C744F58E485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C844642E-44C8-88E8-F592-D45DEDB55B54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C844642E-44C8-88E8-F592-D45DEDB55B54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C844642E-44C8-88E8-F592-D45DEDB55B54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C844642E-44C8-88E8-F592-D45DEDB55B54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

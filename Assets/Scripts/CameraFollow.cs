@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class CameraFollow : MonoBehaviour {
 
@@ -27,12 +28,14 @@ public class CameraFollow : MonoBehaviour {
     float zmovetime = 0.5f;
 
     float movetime = 0.0f;
-    float targetsize = 0f;
+    float targetsize = 100f;
 
     public bool rotate = false;
 
     float rotatetime = 0.6f;
     float time = 0;
+
+    public Toggle autozoom;
 
 
 	void FixedUpdate () {
@@ -124,36 +127,46 @@ public class CameraFollow : MonoBehaviour {
 
     void Update()
     {
-
-        if (!moving)
+        if (autozoom.isOn)
         {
-            oldtargetsize = targetsize;
-            targetsize = Mathf.Log(following.mass+1);
-            if (targetsize != oldtargetsize)
+            if (!moving)
             {
-                moving = true;
-                movetime = 0.0f;
-                zmovetime = Mathf.Abs((targetsize - oldtargetsize)/2);
+                oldtargetsize = targetsize;
+                targetsize = Mathf.Sqrt(following.mass)*3;
+                if (targetsize != oldtargetsize)
+                {
+                    moving = true;
+                    movetime = 0.0f;
+                    //zmovetime = Mathf.Abs((targetsize - oldtargetsize) / 2);
+                }
+
+
             }
+            else
+            {
+                movetime += Time.deltaTime;
 
+                GetComponent<Camera>().orthographicSize = Mathf.Lerp(oldtargetsize, targetsize, movetime / zmovetime);
 
+                if (GetComponent<Camera>().orthographicSize == targetsize)
+                    moving = false;
+
+            }
         }
         else
         {
-            movetime += Time.deltaTime;
-
-            GetComponent<Camera>().orthographicSize = Mathf.Lerp(oldtargetsize, targetsize, movetime / zmovetime);
-
-            if (GetComponent<Camera>().orthographicSize == targetsize)
-                moving = false;
-
+            GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse ScrollWheel")*3f;
+            moving = false;
         }
 
-        bg.size = GetComponent<Camera>().orthographicSize/2.4f;
+        GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, 1, 100);
 
-        Vector3 camerasize1 = Camera.main.ViewportToWorldPoint(new Vector3(1,1,0)) - Camera.main.ViewportToWorldPoint(new Vector3(0,1,0));
+        bg.size = GetComponent<Camera>().orthographicSize / 2.4f;
+
+        Vector3 camerasize1 = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0)) - Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
         Vector3 camerasize2 = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)) - Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
 
-        minimapcube.transform.localScale = new Vector3(camerasize1.magnitude, camerasize2.magnitude,1);
+        transform.localScale = new Vector3(camerasize1.magnitude, camerasize2.magnitude, 1);
+
     }
 }

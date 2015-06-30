@@ -9,7 +9,7 @@ public class junkcollector : MonoBehaviour {
     {
         if(other.gameObject.tag=="junk")
         {
-            controller.Collect(other.gameObject);
+            //controller.Collect(other.gameObject);
         }
     }
 }

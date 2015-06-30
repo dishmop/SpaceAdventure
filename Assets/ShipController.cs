@@ -5,7 +5,7 @@ public class ShipController : MonoBehaviour {
 
     public Vector2 force;
     public float torque;
-    public GameObject partsys;
+    //public GameObject partsys;
 
     Rigidbody2D rb;
 
@@ -20,13 +20,13 @@ public class ShipController : MonoBehaviour {
 	void Update () {
         rb.AddRelativeForce(force);
 
-        float ang = Mathf.Atan2(force.y, force.x) * Mathf.Rad2Deg -rb.rotation;
+        //float ang = Mathf.Atan2(force.y, force.x) * Mathf.Rad2Deg -rb.rotation;
 
         //this is wrong!
-        partsys.transform.rotation = Quaternion.Euler(ang, 90, 0);
+        //partsys.transform.rotation = Quaternion.Euler(ang, 90, 0);
 
         //rb.AddTorque(torque);
 
-        partsys.SetActive(particlesenabled);
+        //partsys.SetActive(particlesenabled);
     }
 }

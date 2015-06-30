@@ -6,6 +6,8 @@ public class CameraFollow : MonoBehaviour {
     public Rigidbody2D following;
     public backgroundmover bg;
 
+    public GameObject minimapcube;
+
 
     [SerializeField] float linearaccel;
     [SerializeField] float angularaccel;
@@ -27,6 +29,11 @@ public class CameraFollow : MonoBehaviour {
     float movetime = 0.0f;
     float targetsize = 0f;
 
+    public bool rotate = false;
+
+    float rotatetime = 0.6f;
+    float time = 0;
+
 
 	void FixedUpdate () {
         Vector2 position = new Vector2(transform.position.x, transform.position.y);
@@ -37,6 +44,7 @@ public class CameraFollow : MonoBehaviour {
 
         Vector2 lineardisp = following.position - position;
         float angulardisp = following.rotation - rotation;
+
 
         //constrain angles to [-180,180]
         while (angulardisp > 180) angulardisp -= 360;
@@ -81,9 +89,30 @@ public class CameraFollow : MonoBehaviour {
         linearvel = rellinearvel + following.velocity;
         angularvel = relangularvel + following.angularVelocity;
 
+        angularvel = Mathf.Clamp(angularvel, -180, 180);
+
         //set position from speed
         transform.position += new Vector3(linearvel.x,linearvel.y,0) * Time.fixedDeltaTime;
-        rotation += angularvel * Time.fixedDeltaTime;
+
+        if (!rotate)
+        {
+            angularvel = 0;
+            if (rotation != 0)
+            {
+                time += Time.fixedDeltaTime;
+                rotation = Mathf.Lerp(rotation, 0, time / rotatetime);
+            }
+            else
+            {
+                time = 0;
+            }
+
+        }
+        else
+            rotation += angularvel * Time.fixedDeltaTime;
+
+        while (rotation > 180)  rotation -= 360;
+        while (rotation < -180) rotation += 360;
 
         transform.rotation = Quaternion.AngleAxis(rotation, new Vector3(0,0,1));
 
@@ -104,6 +133,7 @@ public class CameraFollow : MonoBehaviour {
             {
                 moving = true;
                 movetime = 0.0f;
+                zmovetime = Mathf.Abs((targetsize - oldtargetsize)/2);
             }
 
 
@@ -120,5 +150,10 @@ public class CameraFollow : MonoBehaviour {
         }
 
         bg.size = GetComponent<Camera>().orthographicSize/2.4f;
+
+        Vector3 camerasize1 = Camera.main.ViewportToWorldPoint(new Vector3(1,1,0)) - Camera.main.ViewportToWorldPoint(new Vector3(0,1,0));
+        Vector3 camerasize2 = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)) - Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+
+        minimapcube.transform.localScale = new Vector3(camerasize1.magnitude, camerasize2.magnitude,1);
     }
 }

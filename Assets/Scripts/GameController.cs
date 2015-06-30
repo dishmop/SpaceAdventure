@@ -11,8 +11,10 @@ public class GameController : MonoBehaviour {
     public GameObject cam;
     public GameObject ship;
     public GameObject junkcollector;
+    public ParticleSystem partsys;
 
-    public Slider slider;
+    public Slider massslider;
+    public Slider healthslider;
 
     List<Rigidbody2D> ships = new List<Rigidbody2D>();
     List<Rigidbody2D> junks = new List<Rigidbody2D>();
@@ -22,7 +24,16 @@ public class GameController : MonoBehaviour {
 
     public float maxcarriedmass = 10;
 
+    public float tractorrange = 3f;
+    public float tractorstregth = 1f;
+    public float tractorlength = 1f;
+
     float playermass;
+
+    Vector3 localtractorpos;
+    GameObject tractedobj = null;
+
+    float health = 1.0f;
 
 
 	// Use this for initialization
@@ -41,9 +52,9 @@ public class GameController : MonoBehaviour {
 
             ships.Add(newship.GetComponent<Rigidbody2D>());
 
-            newship.GetComponent<ShipController>().force = new Vector2(Random.Range(-100f, 100f), Random.Range(-100f, 100f));
-            newship.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
-            newship.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-0, 0), Random.Range(-0, 0));
+            //newship.GetComponent<ShipController>().force = new Vector2(Random.Range(-100f, 100f), Random.Range(-100f, 100f));
+            newship.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-3f, 3f);
+            newship.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
         }
 
         for(int n=0; n<100; n++)
@@ -66,6 +77,7 @@ public class GameController : MonoBehaviour {
 	void Update () {
 	    //rotate arm towards mouse
         Vector3 cursor = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y));
+        cursor.z = 0;
         Vector3 mouseoffset = cursor - arm.transform.position;
 
         arm.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(mouseoffset.y, mouseoffset.x), new Vector3(0, 0, 1));
@@ -77,18 +89,63 @@ public class GameController : MonoBehaviour {
             {
                 carriedmass -= junk.GetComponent<Rigidbody2D>().mass;
 
-                Vector3 offset = new Vector3(0.8f, 0, 0);
+                Vector3 offset = new Vector3(junkcollector.GetComponent<CircleCollider2D>().radius+0.2f, 0, 0);
                 Vector3 position = arm.transform.position + arm.transform.rotation * offset;
                 GameObject newjunk = (GameObject)Instantiate(junk, position, arm.transform.rotation);
 
                 newjunk.GetComponent<Rigidbody2D>().velocity = player.velocity;
 
-                Vector3 impulse = arm.transform.rotation * new Vector3(2, 0, 0);
+                Vector3 impulse = arm.transform.rotation * new Vector3(5, 0, 0);
                 newjunk.GetComponent<Rigidbody2D>().AddForce(new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
                 player.AddForce(-new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
 
                 junks.Add(newjunk.GetComponent<Rigidbody2D>());
             }
+        }
+
+        if(tractedobj != null)
+        {
+            Vector3 position = tractedobj.transform.TransformPoint(localtractorpos);
+            Vector3 offset = position - arm.transform.position;
+
+            partsys.gameObject.transform.position = position;
+            partsys.gameObject.transform.LookAt(arm.transform);
+            partsys.startLifetime = offset.magnitude / partsys.startSpeed;
+
+            Vector2 direction = new Vector2(offset.x, offset.y);
+            direction.Normalize();
+
+            float force = tractorstregth * (offset.magnitude - tractorlength);
+
+            partsys.startColor = Color.red * Mathf.Abs(offset.magnitude - tractorlength) / tractorlength + Color.green * (1 - Mathf.Abs(offset.magnitude - tractorlength) / tractorlength);
+
+            tractedobj.GetComponent<Rigidbody2D>().AddForceAtPosition(-force * direction, new Vector2(position.x, position.y));
+            player.AddForce(force * direction);
+
+
+            if (!Input.GetKey(KeyCode.Mouse1)) tractedobj = null;
+        }else
+        if(Input.GetKey(KeyCode.Mouse1) && mouseoffset.magnitude < tractorrange)
+        {
+            partsys.gameObject.SetActive(true);
+            partsys.gameObject.transform.position = cursor;
+            partsys.gameObject.transform.LookAt(arm.transform);
+            partsys.startLifetime = mouseoffset.magnitude / partsys.startSpeed;
+            partsys.startColor = Color.white;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hitinfo = Physics2D.GetRayIntersection(ray);
+
+            if(hitinfo.rigidbody != null)
+            {
+                localtractorpos = hitinfo.transform.InverseTransformPoint(cursor);
+                tractedobj = hitinfo.rigidbody.gameObject;
+            }
+
+        }
+        else
+        {
+            partsys.gameObject.SetActive(false);
         }
 
         //set position for trigger
@@ -97,8 +154,11 @@ public class GameController : MonoBehaviour {
         junkcollector.transform.position = player.position;
 
         player.mass = playermass + carriedmass;
+        player.gameObject.transform.localScale = new Vector3(Mathf.Sqrt(player.mass / playermass)*0.5f, Mathf.Sqrt(player.mass / playermass)*0.5f, 1);
+        junkcollector.GetComponent<CircleCollider2D>().radius = Mathf.Sqrt(player.mass / playermass) * 0.4f;
 
-        slider.value = player.mass / (playermass + maxcarriedmass);
+        massslider.value = player.mass / (playermass + maxcarriedmass);
+        healthslider.value = health;
 
 
         //stabilize if space is pressed
@@ -140,19 +200,24 @@ public class GameController : MonoBehaviour {
         }
 	}
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
-        if(other.gameObject.tag == "ship")
+        if(other.gameObject.tag == "junk")
         {
-            cam.GetComponent<CameraFollow>().following = other.gameObject.GetComponent<Rigidbody2D>();
+            if (other.gameObject.GetComponent<Rigidbody2D>().mass > playermass + carriedmass)
+            {
+                cam.GetComponent<CameraFollow>().following = other.gameObject.GetComponent<Rigidbody2D>();
+                cam.GetComponent<CameraFollow>().rotate = true;
+            }
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.tag == "ship")
+        if (other.gameObject.tag == "junk")
         {
             cam.GetComponent<CameraFollow>().following = player;
+            cam.GetComponent<CameraFollow>().rotate = false;
         }
     }
 
@@ -166,6 +231,10 @@ public class GameController : MonoBehaviour {
             player.velocity = (player.velocity * player.mass + junk.GetComponent<Rigidbody2D>().velocity * junk.GetComponent<Rigidbody2D>().mass)/(playermass+carriedmass);
 
             Destroy(junk);
+        }
+        else
+        {
+            //health -= junk.GetComponent<Rigidbody2D>().velocity * junk.GetComponent<Rigidbody2D>().mass/(playermass+carriedmass);
         }
     }
 }

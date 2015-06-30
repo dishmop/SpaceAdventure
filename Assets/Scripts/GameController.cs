@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 
 public class GameController : MonoBehaviour {
     public Rigidbody2D player;
@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
 
     public Slider massslider;
     public Slider healthslider;
+    public Slider shotsize;
 
     List<Rigidbody2D> ships = new List<Rigidbody2D>();
     public List<Rigidbody2D> junks = new List<Rigidbody2D>();
@@ -88,10 +89,13 @@ public class GameController : MonoBehaviour {
 
         arm.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(mouseoffset.y, mouseoffset.x), new Vector3(0, 0, 1));
 
-        //shoot when mouse clicked
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            playerSaucerController.Shoot();
+            //shoot when mouse clicked
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                playerSaucerController.Shoot(shotsize.value * 5);
+            }
         }
 
         if (Input.GetKey(KeyCode.Mouse1))
@@ -165,6 +169,10 @@ public class GameController : MonoBehaviour {
             cam.GetComponent<CameraFollow>().following = player;
             cam.GetComponent<CameraFollow>().rotate = false;
         }
+
+        if (playerSaucerController.health <= 0)
+            Debug.Break();
+
 	}
 
     void OnTriggerStay2D(Collider2D other)

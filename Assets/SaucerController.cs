@@ -23,6 +23,8 @@ public class SaucerController : MonoBehaviour {
 
     public float health = 1.0f;
 
+    float shotspeed = 100;
+
     public float maxMass
     {
         get { return saucermass + maxcarriedmass; }
@@ -80,25 +82,27 @@ public class SaucerController : MonoBehaviour {
         }
     }
 
-    public void Shoot()
+    public void Shoot(float shotmass)
     {
-        if (carriedmass >= junk.GetComponent<Rigidbody2D>().mass)
+        if (carriedmass >= shotmass)
         {
-            carriedmass -= junk.GetComponent<Rigidbody2D>().mass;
+            carriedmass -= shotmass;
 
-            Vector3 offset = new Vector3(transform.localScale.x * 1.7f + 0.2f, 0, 0);
+            Vector3 offset = new Vector3(transform.localScale.x * 1.8f + 2*Mathf.Sqrt(shotmass), 0, 0);
             Vector3 position = arm.transform.position + arm.transform.rotation * offset;
             GameObject newjunk = (GameObject)Instantiate(junk, position, arm.transform.rotation);
 
             newjunk.GetComponent<Rigidbody2D>().velocity = rb.velocity;
 
-            Vector3 impulse = arm.transform.rotation * new Vector3(30, 0, 0);
+            newjunk.GetComponent<Rigidbody2D>().mass = shotmass;
+
+            Vector3 impulse = arm.transform.rotation * new Vector3(shotspeed, 0, 0) * shotmass;
             newjunk.GetComponent<Rigidbody2D>().AddForce(new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
             rb.AddForce(-new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
 
             controller.junks.Add(newjunk.GetComponent<Rigidbody2D>());
 
-            newjunk.transform.localScale = new Vector3(Mathf.Sqrt(newjunk.GetComponent<Rigidbody2D>().mass), Mathf.Sqrt(newjunk.GetComponent<Rigidbody2D>().mass), 1);
+            newjunk.transform.localScale = new Vector3(Mathf.Sqrt(shotmass), Mathf.Sqrt(shotmass), 1);
         }
     }
     

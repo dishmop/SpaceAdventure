@@ -9,16 +9,20 @@ public class GameController : MonoBehaviour {
     public GameObject arm;
     public GameObject junk;
     public GameObject cam;
-    public GameObject ship;
+    //public GameObject ship;
+    public GameObject enemy;
     //public GameObject junkcollector;
     //public ParticleSystem partsys;
+    public GameObject healthcrate;
 
     public Slider massslider;
     public Slider healthslider;
     public Slider shotsize;
 
-    List<Rigidbody2D> ships = new List<Rigidbody2D>();
+   // List<Rigidbody2D> ships = new List<Rigidbody2D>();
     public List<Rigidbody2D> junks = new List<Rigidbody2D>();
+    public List<Rigidbody2D> enemies = new List<Rigidbody2D>();
+    public List<Rigidbody2D> pickups = new List<Rigidbody2D>();
 
 
  //   public float carriedmass = 10;
@@ -62,9 +66,9 @@ public class GameController : MonoBehaviour {
 
         playerSaucerController = player.gameObject.GetComponent<SaucerController>();
 
-        for(int n=0; n<100; n++)
+        for(int n=0; n<500; n++)
         {
-            float radius = Random.Range(0f, worldradius-5);
+            float radius = (worldradius-5)*Mathf.Sqrt(Random.value);
             float angle = Random.Range(0, 2 * Mathf.PI);
             Vector3 position = new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
             Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
@@ -75,9 +79,37 @@ public class GameController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
             newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-50f, 50f), Random.Range(-50f, 50f));
-            newjunk.GetComponent<Rigidbody2D>().mass = WeightedRandom(0, 400, 4);
+            newjunk.GetComponent<Rigidbody2D>().mass = WeightedRandom(0, 100, 6);
 
             newjunk.transform.localScale = new Vector3(Mathf.Sqrt(newjunk.GetComponent<Rigidbody2D>().mass),Mathf.Sqrt(newjunk.GetComponent<Rigidbody2D>().mass),1);
+        }
+
+        for (int n = 0; n < 20; n++)
+        {
+            float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
+            float angle = Random.Range(0, 2 * Mathf.PI);
+            Vector3 position = new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
+            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
+
+            GameObject newenemy = (GameObject)Instantiate(enemy, position, rotation);
+
+            newenemy.gameObject.GetComponent<SaucerController>().controller = this;
+
+            enemies.Add(newenemy.GetComponent<Rigidbody2D>());
+        }
+
+        for (int n = 0; n < 20; n++)
+        {
+            float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
+            float angle = Random.Range(0, 2 * Mathf.PI);
+            Vector3 position = new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
+            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
+
+            GameObject newcrate = (GameObject)Instantiate(healthcrate, position, rotation);
+
+            pickups.Add(newcrate.GetComponent<Rigidbody2D>());
+
+            newcrate.GetComponent<Rigidbody2D>().angularVelocity = Random.value;
         }
     }
 	
@@ -85,16 +117,15 @@ public class GameController : MonoBehaviour {
 	    //rotate arm towards mouse
         Vector3 cursor = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y));
         cursor.z = 0;
-        Vector3 mouseoffset = cursor - arm.transform.position;
+        //Vector3 mouseoffset = cursor - arm.transform.position;
 
-        arm.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(mouseoffset.y, mouseoffset.x), new Vector3(0, 0, 1));
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             //shoot when mouse clicked
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                playerSaucerController.Shoot(shotsize.value * 5);
+                playerSaucerController.Shoot(shotsize.value * 5, cursor);
             }
         }
 
@@ -162,6 +193,34 @@ public class GameController : MonoBehaviour {
             {
                 junk.position -= 2 * displacement;
             }
+
+            if (junk.mass < player.GetComponent<SaucerController>().maxcarriedmass - player.GetComponent<SaucerController>().carriedmass)
+                junk.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.green + Color.grey;
+            else
+                junk.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red + Color.grey;
+        }
+
+        foreach (Rigidbody2D item in pickups)
+        {
+            Vector2 displacement = item.position - player.position;
+            if (displacement.magnitude > worldradius)
+            {
+                item.position -= 2 * displacement;
+            }
+
+            if (item.mass < player.GetComponent<SaucerController>().maxcarriedmass - player.GetComponent<SaucerController>().carriedmass)
+                item.gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.green + Color.grey;
+            else
+                item.gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.red + Color.grey;
+        }
+
+        foreach (Rigidbody2D enemy in enemies)
+        {
+            Vector2 displacement = enemy.position - player.position;
+            if (displacement.magnitude > worldradius)
+            {
+                enemy.position -= 2 * worldradius * displacement.normalized;
+            }
         }
 
         if(!snaptoobjects.isOn)
@@ -170,8 +229,8 @@ public class GameController : MonoBehaviour {
             cam.GetComponent<CameraFollow>().rotate = false;
         }
 
-        if (playerSaucerController.health <= 0)
-            Debug.Break();
+        //if (playerSaucerController.health <= 0)
+        //    Debug.Break();
 
 	}
 

@@ -119,6 +119,7 @@ public class CameraFollow : MonoBehaviour {
 
         transform.rotation = Quaternion.AngleAxis(rotation, new Vector3(0,0,1));
 
+        //transform.LookAt(following.transform);
 
 	}
 
@@ -155,11 +156,14 @@ public class CameraFollow : MonoBehaviour {
         }
         else
         {
+            if (Input.GetKey(KeyCode.Mouse2))
+                GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse Y");
+
             GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse ScrollWheel")*3f;
             moving = false;
         }
 
-        GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, 1, 100);
+        GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, 1, 500);
 
         bg.size = GetComponent<Camera>().orthographicSize / 2.4f;
 

@@ -71,13 +71,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\SaucerController.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\SaucerAI.cs" />
+    <Compile Include="Assets\Scripts\SaucerController.cs" />
+    <Compile Include="Assets\Scripts\ShipController.cs" />
     <Compile Include="Assets\Scripts\backgroundmover.cs" />
-    <Compile Include="Assets\ShipController.cs" />
-    <Compile Include="Assets\junkcollector.cs" />
-    <Compile Include="Assets\minimapcam.cs" />
+    <Compile Include="Assets\Scripts\junkcollector.cs" />
+    <Compile Include="Assets\Scripts\minimapcam.cs" />
+    <Compile Include="Assets\junkscript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

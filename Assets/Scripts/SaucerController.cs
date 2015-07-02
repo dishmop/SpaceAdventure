@@ -10,9 +10,7 @@ public class SaucerController : MonoBehaviour {
     public GameObject junk;
     public GameObject arm;
     public GameObject shieldobj;
-    //public SpriteRenderer ship;
 
-    //public ParticleSystem partsys;
     public ParticleSystem smokesys;
 
     public GameObject beam;
@@ -29,15 +27,15 @@ public class SaucerController : MonoBehaviour {
     public float health = 1.0f;
 
     float shield;
-    float maxshield = 1000;
-    float shieldregen = 100;
+    public float maxshield = 1000;
+    float shieldregen = 0.1f;
 
     float shotspeed = 100;
 
     public bool dead = false;
 
     float timesinceshot = 100;
-    float reloadtime = 1f;
+    float reloadtimepermass = 0.1f;
 
     public float maxMass
     {
@@ -73,7 +71,7 @@ public class SaucerController : MonoBehaviour {
         transform.localScale = new Vector3(Mathf.Sqrt(saucermass), Mathf.Sqrt(saucermass), 1);
 
         if(!dead)
-            shield += shieldregen * Time.deltaTime;
+            shield += maxshield* shieldregen * Time.deltaTime;
 
         shield = Mathf.Clamp(shield, 0, maxshield);
 
@@ -118,7 +116,7 @@ public class SaucerController : MonoBehaviour {
             {
                 if (item.GetComponent<Rigidbody2D>() == null) return false;
                 carriedmass += item.GetComponent<Rigidbody2D>().mass;
-                controller.junks.Remove(item.GetComponent<Rigidbody2D>());
+                //controller.junks.Remove(item.GetComponent<Rigidbody2D>());
 
                 rb.velocity = (rb.velocity * rb.mass + item.GetComponent<Rigidbody2D>().velocity * item.GetComponent<Rigidbody2D>().mass) / (saucermass + carriedmass);
 
@@ -132,7 +130,7 @@ public class SaucerController : MonoBehaviour {
             if (!dead && carriedmass + item.GetComponent<Rigidbody2D>().mass <= maxcarriedmass)
             {
                 carriedmass += item.GetComponent<Rigidbody2D>().mass;
-                controller.pickups.Remove(item.GetComponent<Rigidbody2D>());
+                //controller.pickups.Remove(item.GetComponent<Rigidbody2D>());
 
                 rb.velocity = (rb.velocity * rb.mass + item.GetComponent<Rigidbody2D>().velocity * item.GetComponent<Rigidbody2D>().mass) / (saucermass + carriedmass);
 
@@ -147,7 +145,7 @@ public class SaucerController : MonoBehaviour {
 
     public void Shoot(float shotmass, Vector3 shootat)
     {
-        if (!dead && carriedmass >= shotmass && timesinceshot > reloadtime)
+        if (!dead && carriedmass >= shotmass && timesinceshot > reloadtimepermass * shotmass)
         {
             Vector3 offset = shootat - arm.transform.position;
             arm.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(offset.y, offset.x), new Vector3(0, 0, 1));
@@ -165,10 +163,6 @@ public class SaucerController : MonoBehaviour {
             Vector3 impulse = arm.transform.rotation * new Vector3(shotspeed, 0, 0) * shotmass;
             newjunk.GetComponent<Rigidbody2D>().AddForce(new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
             rb.AddForce(-new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
-
-            controller.junks.Add(newjunk.GetComponent<Rigidbody2D>());
-
-            newjunk.transform.localScale = new Vector3(Mathf.Sqrt(shotmass), Mathf.Sqrt(shotmass), 1);
 
             newjunk.GetComponent<junkscript>().shotby = gameObject;
 
@@ -191,6 +185,12 @@ public class SaucerController : MonoBehaviour {
                 }
                 Vector3 position = tractedobj.transform.TransformPoint(localtractorpos);
                 Vector3 offset = position - arm.transform.position;
+
+                if(offset.magnitude > tractorrange)
+                {
+                    tractedobj = null;
+                    return;
+                }
 
                 SetBeam(arm.transform.position, position);
 

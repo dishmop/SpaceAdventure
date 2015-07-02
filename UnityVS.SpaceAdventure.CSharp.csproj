@@ -71,6 +71,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ObjectController.cs" />
+    <Compile Include="Assets\SaucerPlayer.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\SaucerAI.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Assets\Scripts\junkcollector.cs" />
     <Compile Include="Assets\Scripts\minimapcam.cs" />
     <Compile Include="Assets\junkscript.cs" />
+    <Compile Include="Assets\pickupscript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\junkcollector.cs" />
     <Compile Include="Assets\Scripts\minimapcam.cs" />
     <Compile Include="Assets\TutorialLevel.cs" />
+    <Compile Include="Assets\gridOverlay.cs" />
     <Compile Include="Assets\junkscript.cs" />
     <Compile Include="Assets\pickupscript.cs" />
   </ItemGroup>

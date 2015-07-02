@@ -5,9 +5,9 @@ using UnityEngine.UI;
 //different tutorial states
 enum gamestate
 {
-    Zoom1, Zoom2, 
     Shoot1, Shoot2, Shoot3, Shoot3a, Shoot4, 
-    Momentum1, Momentum2, Momentum3, Momentum4, 
+    Momentum1, Momentum2, Momentum3, Momentum4,
+    Zoom1, Zoom2, 
     Navigate1, Navigate2, Navigate3,
     Done
 };
@@ -28,7 +28,7 @@ public class TutorialLevel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        currentState = gamestate.Zoom1;
+        currentState = gamestate.Shoot1;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +46,7 @@ public class TutorialLevel : MonoBehaviour {
                     currentState++;
                 break;
             case gamestate.Shoot1:
-                zoomhighlight.SetActive(false);
+                
                 if (ShowText("You can carry a certain amount of rock", -1)) currentState++;
                 break;
             case gamestate.Shoot2:
@@ -79,13 +79,15 @@ public class TutorialLevel : MonoBehaviour {
                 if (ShowText("You can use this to move the ship.", -1)) currentState++;
                 break;
             case gamestate.Navigate1:
+                zoomhighlight.SetActive(false);
                 SaucerPlayer.instance.sc.carriedmass = 0;
                 if(!done)
                 {
                     done = true;
                     largerock = (GameObject)Instantiate(junk, SaucerPlayer.instance.transform.position + new Vector3(500, 500, 0), new Quaternion());
                     largerock.GetComponent<Rigidbody2D>().mass = 10000f;
-                    largerock.GetComponent<Rigidbody2D>().velocity = SaucerPlayer.instance.GetComponent<Rigidbody2D>().velocity;
+                    SaucerPlayer.instance.GetComponent<Rigidbody2D>().velocity = new Vector3();
+
                 }
                 if (ShowText("Remember Newton's First Law: An object in motion continues at constant velocity unless acted on by forces.")) currentState++;
                 break;

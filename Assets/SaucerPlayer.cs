@@ -5,8 +5,9 @@ using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(SaucerController))]
 public class SaucerPlayer : MonoBehaviour {
+    public static SaucerPlayer instance { get; private set; }
 
-    SaucerController sc;
+    public SaucerController sc;
 
     Rigidbody2D rb;
 
@@ -18,6 +19,7 @@ public class SaucerPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        instance = this;
         sc = GetComponent<SaucerController>();
         rb = GetComponent<Rigidbody2D>();
     }

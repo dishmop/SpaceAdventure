@@ -15,7 +15,7 @@ public class backgroundmover : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-        transform.localScale = new Vector3(size,size,1);
+        //transform.localScale = new Vector3(size,size,1);
 	}
 
     //void OnTriggerExit2D(Collider2D other)

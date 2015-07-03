@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour {
     public GameObject enemy;
     public GameObject healthcrate;
 
+    public bool PeriodicBCs = false;
+
     public float worldradius = 1000;
 
     float WeightedRandom(float min, float max, float power)

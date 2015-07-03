@@ -26,7 +26,7 @@ public class SaucerController : MonoBehaviour {
 
     public float health = 1.0f;
 
-    float shield;
+    public float shield;
     public float maxshield = 1000;
     float shieldregen = 0.1f;
 
@@ -63,8 +63,10 @@ public class SaucerController : MonoBehaviour {
         if (dead)
         {
             beam.SetActive(false);
-            //ship.color = Color.gray;
             GetComponentInChildren<MeshRenderer>().material.color = Color.black;
+        } else
+        {
+            GetComponentInChildren<MeshRenderer>().material.color = Color.white;
         }
 
         rb.mass = mass;

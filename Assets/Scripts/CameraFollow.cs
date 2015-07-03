@@ -76,9 +76,16 @@ public class CameraFollow : MonoBehaviour {
     void Update()
     {
         if (Input.GetKey(KeyCode.Mouse2))
-            GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse Y")*5f;
+        {
+            GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse Y") * 5f;
+            zoombar.value = (GetComponent<Camera>().orthographicSize - minzoom) / (maxzoom - minzoom);
+        }
+        else
+        {
+            GetComponent<Camera>().orthographicSize = minzoom + (maxzoom - minzoom) * zoombar.value;
+        }
 
-        GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse ScrollWheel")*3f;
+        //GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse ScrollWheel")*3f;
 
         GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minzoom, maxzoom);
         float bgsize = GetComponent<Camera>().orthographicSize / 2.4f;
@@ -88,7 +95,5 @@ public class CameraFollow : MonoBehaviour {
         Vector3 camerasize2 = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)) - Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
 
         transform.localScale = new Vector3(camerasize1.magnitude, camerasize2.magnitude, 1);
-
-        zoombar.value = (GetComponent<Camera>().orthographicSize - minzoom) / (maxzoom - minzoom);
     }
 }

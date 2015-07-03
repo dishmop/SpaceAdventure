@@ -17,7 +17,7 @@ public class minimapcam : MonoBehaviour {
         z = transform.position.z;
         size = GetComponent<Camera>().orthographicSize;
         mainsize = maincam.orthographicSize;
-        go = GetComponent<gridOverlay>();
+        //go = GetComponent<gridOverlay>();
 	}
 	
 	// Update is called once per frame
@@ -28,21 +28,21 @@ public class minimapcam : MonoBehaviour {
 
         GetComponent<Camera>().orthographicSize = size * maincam.orthographicSize / mainsize;
 
-        if (maincam.orthographicSize < 50)
-        {
-            go.largeStep = 50;
-        }
-        else if(maincam.orthographicSize < 100)
-        {
-            go.largeStep = 100;
-        }
-        else if(maincam.orthographicSize <200)
-        {
-            go.largeStep = 200;
-        }
-        else if(maincam.orthographicSize<500)
-        {
-            go.largeStep = 400;
-        }
+        //if (maincam.orthographicSize < 50)
+        //{
+        //    go.largeStep = 50;
+        //}
+        //else if(maincam.orthographicSize < 100)
+        //{
+        //    go.largeStep = 100;
+        //}
+        //else if(maincam.orthographicSize <200)
+        //{
+        //    go.largeStep = 200;
+        //}
+        //else if(maincam.orthographicSize<500)
+        //{
+        //    go.largeStep = 400;
+        //}
 	}
 }

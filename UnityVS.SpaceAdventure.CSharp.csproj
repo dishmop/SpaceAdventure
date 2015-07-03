@@ -71,23 +71,38 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ObjectController.cs" />
-    <Compile Include="Assets\SaucerPlayer.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_BGScroller.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_DestroyByBoundary.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_DestroyByContact.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_DestroyByTime.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_EvasiveManeuver.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_GameController.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_Mover.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_PlayerController.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_RandomRotator.cs" />
+    <Compile Include="Assets\Done\Done_Scripts\Done_WeaponController.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\ObjectController.cs" />
     <Compile Include="Assets\Scripts\SaucerAI.cs" />
     <Compile Include="Assets\Scripts\SaucerController.cs" />
+    <Compile Include="Assets\Scripts\SaucerPlayer.cs" />
     <Compile Include="Assets\Scripts\ShipController.cs" />
     <Compile Include="Assets\Scripts\backgroundmover.cs" />
+    <Compile Include="Assets\Scripts\gridOverlay.cs" />
     <Compile Include="Assets\Scripts\junkcollector.cs" />
+    <Compile Include="Assets\Scripts\junkscript.cs" />
     <Compile Include="Assets\Scripts\minimapcam.cs" />
+    <Compile Include="Assets\Scripts\pickupscript.cs" />
     <Compile Include="Assets\TutorialLevel.cs" />
-    <Compile Include="Assets\gridOverlay.cs" />
-    <Compile Include="Assets\junkscript.cs" />
-    <Compile Include="Assets\pickupscript.cs" />
+    <Compile Include="Assets\dustscript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+    <None Include="Assets\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />
+    <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAdd.shader" />
+    <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAddSoft.shader" />
+    <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

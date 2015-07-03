@@ -3,7 +3,17 @@ using System.Collections;
 
 public class SaucerController : MonoBehaviour {
     public float saucermass;
-    public float carriedmass = 20;
+
+    public float rockmass;
+
+    public float Ir;
+    public float Pd;
+    public float W;
+
+    public float carriedmass
+    {
+    get {return rockmass + Ir + Pd + W;}
+    }
     public float maxcarriedmass = 50;
 
     public GameController controller;
@@ -81,7 +91,7 @@ public class SaucerController : MonoBehaviour {
 
         timesinceshot += Time.deltaTime;
 
-        smokesys.emissionRate = Mathf.Clamp(1000 * (1 - health),0,1000);
+        smokesys.emissionRate = Mathf.Clamp(100 * (1 - health),0,100);
 
         health = Mathf.Clamp(health, 0, 1);
 
@@ -117,7 +127,12 @@ public class SaucerController : MonoBehaviour {
             if (!dead && carriedmass + item.GetComponent<Rigidbody2D>().mass <= maxcarriedmass)
             {
                 if (item.GetComponent<Rigidbody2D>() == null) return false;
-                carriedmass += item.GetComponent<Rigidbody2D>().mass;
+
+                rockmass += item.GetComponent<junkscript>().rockmass;
+                Ir += item.GetComponent<junkscript>().Ir;
+                Pd += item.GetComponent<junkscript>().Pd;
+                W += item.GetComponent<junkscript>().W;
+
                 //controller.junks.Remove(item.GetComponent<Rigidbody2D>());
 
                 rb.velocity = (rb.velocity * rb.mass + item.GetComponent<Rigidbody2D>().velocity * item.GetComponent<Rigidbody2D>().mass) / (saucermass + carriedmass);
@@ -131,7 +146,7 @@ public class SaucerController : MonoBehaviour {
         {
             if (!dead && carriedmass + item.GetComponent<Rigidbody2D>().mass <= maxcarriedmass)
             {
-                carriedmass += item.GetComponent<Rigidbody2D>().mass;
+                rockmass += item.GetComponent<Rigidbody2D>().mass;
                 //controller.pickups.Remove(item.GetComponent<Rigidbody2D>());
 
                 rb.velocity = (rb.velocity * rb.mass + item.GetComponent<Rigidbody2D>().velocity * item.GetComponent<Rigidbody2D>().mass) / (saucermass + carriedmass);
@@ -147,12 +162,12 @@ public class SaucerController : MonoBehaviour {
 
     public void Shoot(float shotmass, Vector3 shootat)
     {
-        if (!dead && carriedmass >= shotmass && timesinceshot > reloadtimepermass * shotmass)
+        if (!dead && rockmass >= shotmass && timesinceshot > reloadtimepermass * shotmass)
         {
             Vector3 offset = shootat - arm.transform.position;
             arm.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(offset.y, offset.x), new Vector3(0, 0, 1));
 
-            carriedmass -= shotmass;
+            rockmass -= shotmass;
 
             Vector3 shotoffset = new Vector3(transform.localScale.x * 1.8f + 2*Mathf.Sqrt(shotmass), 0, 0);
             Vector3 position = arm.transform.position + arm.transform.rotation * shotoffset;
@@ -160,7 +175,7 @@ public class SaucerController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().velocity = rb.velocity;
 
-            newjunk.GetComponent<Rigidbody2D>().mass = shotmass;
+            newjunk.GetComponent<junkscript>().Init(shotmass, 0, 0, 0);
 
             Vector3 impulse = arm.transform.rotation * new Vector3(shotspeed, 0, 0) * shotmass;
             newjunk.GetComponent<Rigidbody2D>().AddForce(new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);

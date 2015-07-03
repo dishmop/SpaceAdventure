@@ -11,20 +11,14 @@ enum gamestate
     Zoom1, Zoom2, 
     Navigate1, Navigate2, Navigate3,
     Force1, Force2, Force3,
+    Tractor1, Tractor2, Tractor3, Tractor4, Tractor5, Tractor6,
     Done
 };
 
-public class TutorialLevel : MonoBehaviour {
-    public Text messagetext;
-    public GameObject messagepanel;
-    public GameObject okbutton;
-    public GameObject resetbutton;
+public class TutorialLevel : LevelAbstract {
 
     public GameObject junk;
 
-    public GameObject masshighlight;
-    public GameObject zoomhighlight;
-    public GameObject fader;
 
 
     GameObject largerock;
@@ -69,7 +63,7 @@ public class TutorialLevel : MonoBehaviour {
                 if (ShowText("Notice the bar in the bottom left.", 1)) currentState++;
                 break;
             case gamestate.Shoot3a:
-                if (SaucerPlayer.instance.sc.carriedmass < 50) SaucerPlayer.instance.sc.carriedmass += 0.5f;
+                if (SaucerPlayer.instance.sc.carriedmass < 50) SaucerPlayer.instance.sc.rockmass += 0.5f;
                 if (ShowText("Notice the bar in the bottom left.", 5, 0.4f)) currentState++;
                 break;
             case gamestate.Shoot4:
@@ -92,7 +86,7 @@ public class TutorialLevel : MonoBehaviour {
                 break;
             case gamestate.Navigate1:
                 zoomhighlight.SetActive(false);
-                SaucerPlayer.instance.sc.carriedmass = 0;
+                SaucerPlayer.instance.sc.rockmass = 0;
                 Fade();
                 if(!done)
                 {
@@ -113,7 +107,7 @@ public class TutorialLevel : MonoBehaviour {
                 if (!done)
                 {
                     done = true;
-                    SaucerPlayer.instance.sc.carriedmass = 100;
+                    SaucerPlayer.instance.sc.rockmass = 100;
                 }
                 ShowText("Try to navigate to the large red rock on your minimap.",1);
                 ShowReset();
@@ -126,7 +120,7 @@ public class TutorialLevel : MonoBehaviour {
                     largerock.GetComponent<Rigidbody2D>().mass = 10000f;
                     SaucerPlayer.instance.Respawn();
                     CameraFollow.instance.linearvel = new Vector2(0, 0);
-                    SaucerPlayer.instance.sc.carriedmass = 100;
+                    SaucerPlayer.instance.sc.rockmass = 100;
                     ResetFade();
                 }
                 if ((largerock.transform.position - SaucerPlayer.instance.transform.position).magnitude < 80)
@@ -134,7 +128,7 @@ public class TutorialLevel : MonoBehaviour {
                 break;
             case gamestate.Force1:
                 HideReset();
-                if(ShowText("Recall that force is the rate of change of momentum.")) currentState++;
+                if(ShowText("Recall that force is the rate of change of momentum (Newton's Second Law).")) currentState++;
                 break;
             case gamestate.Force2:
                 if(ShowText("So if you stop quickly, by crashing into something, you experience a lot of force.")) currentState++;
@@ -144,12 +138,37 @@ public class TutorialLevel : MonoBehaviour {
                 if(ShowText("Your shields can absorb some of the force, but not lots at one time.")) currentState++;
                 if(!done)
                 {
-                   done = true;
-                   SaucerPlayer.instance.Respawn();
-                   ResetFade();
-                   Destroy(largerock);
+                    done = true;
+                    SaucerPlayer.instance.Respawn();
+                    ResetFade();
+                    Destroy(largerock);
+                    GameController.instance.NumRandomAsteroids = 500;
+                    GameController.instance.SpawnRocks();
+                    GameController.instance.PeriodicBCs = true;
                 }
                 Fade();
+                break;
+            case gamestate.Tractor1:
+                SaucerPlayer.instance.sc.tractorrange = 200f;
+                if (ShowText("You can use a tractor beam by right-clicking.")) currentState++;
+                break;
+            case gamestate.Tractor2:
+                if (ShowText("You can pick up green rocks by pulling them into you with the tractor beam.")) currentState++;
+                break;
+            case gamestate.Tractor3:
+                if (ShowText("Red rocks are too large to be picked up.")) currentState++;
+                break;
+            case gamestate.Tractor4:
+                if (ShowText("The beam exerts an attractive force on the rock.")) currentState++;
+                break;
+            case gamestate.Tractor5:
+                if (ShowText("Newton's Third Law states: Every force has an equal and opposite force.")) currentState++;
+                break;
+            case gamestate.Tractor6:
+                if (ShowText("This means that you are also pulling the ship towards the rock! You can use this to get around.")) currentState++;
+                break;
+            case gamestate.Done:
+                if (ShowText("Tutorial complete! Press ok to enter the game.")) Application.LoadLevel(1);
                 break;
             default:
                 HideText();
@@ -158,94 +177,4 @@ public class TutorialLevel : MonoBehaviour {
 	}
 
     bool done = false;
-
-    float texttime = 0;
-    string oldtext;
-    public bool finished
-    {
-        get;
-        set;
-    }
-
-    public bool reset
-    {
-        get;set;
-    }
-
-    void ShowReset()
-    {
-        resetbutton.SetActive(true);
-    }
-
-    void HideReset()
-    {
-        resetbutton.SetActive(false);
-        reset = false;
-    }
-
-    //returns whether the text has been there long enough
-    bool ShowText(string text, float displaytime = 0.0f, float startalpha = 1.0f)
-    {
-        Color col;
-
-        if (text != oldtext)
-        {
-            texttime = 0;
-            oldtext = text;
-            messagetext.text = text;
-            messagepanel.SetActive(true);
-            col = Color.white;
-            messagepanel.GetComponent<Image>().color = col;
-
-            finished = false;
-        }
-        else
-        {
-
-            texttime += Time.deltaTime;
-
-            col = messagepanel.GetComponent<Image>().color;
-            col.a = Mathf.Exp(-texttime) * 0.6f + 0.4f;
-            messagepanel.GetComponent<Image>().color = col;
-        }
-
-        if (displaytime > 0)
-        {
-            okbutton.SetActive(false);
-            if (texttime > displaytime)
-            {
-                return true;
-            }
-        }else
-        {
-            okbutton.SetActive(true);
-            if (finished) return true;
-        }
-
-        return false;
-
-    }
-
-    void HideText()
-    {
-        messagepanel.SetActive(false);
-    }
-
-    void ResetFade()
-    {
-        fader.GetComponent<Image>().color = Color.white;
-        fader.SetActive(true);
-    }
-
-    void Fade()
-    {
-        Color color = fader.GetComponent<Image>().color;
-        color.a -= 2f * Time.deltaTime;
-        fader.GetComponent<Image>().color = color;
-
-        if(color.a <= 0)
-        {
-            fader.SetActive(false);
-        }
-    }
 }

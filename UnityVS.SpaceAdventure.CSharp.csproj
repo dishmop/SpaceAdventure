@@ -83,6 +83,9 @@
     <Compile Include="Assets\Done\Done_Scripts\Done_WeaponController.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\Level\MainGame.cs" />
+    <Compile Include="Assets\Scripts\Level\TutorialLevel.cs" />
+    <Compile Include="Assets\Scripts\LevelAbstract.cs" />
     <Compile Include="Assets\Scripts\ObjectController.cs" />
     <Compile Include="Assets\Scripts\SaucerAI.cs" />
     <Compile Include="Assets\Scripts\SaucerController.cs" />
@@ -94,7 +97,6 @@
     <Compile Include="Assets\Scripts\junkscript.cs" />
     <Compile Include="Assets\Scripts\minimapcam.cs" />
     <Compile Include="Assets\Scripts\pickupscript.cs" />
-    <Compile Include="Assets\TutorialLevel.cs" />
     <Compile Include="Assets\dustscript.cs" />
   </ItemGroup>
   <ItemGroup>

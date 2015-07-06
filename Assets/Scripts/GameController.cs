@@ -4,6 +4,17 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+public class areaproperties
+{
+    public Color fogcolour = Color.white;
+    public float[] mineralprobability = {0.3f,0.1f,0.1f,0.05f,0.3f,0.4f,0.3f,0.2f,0.1f};
+    public Vector3 localshoppos = new Vector3(800, 850,0);
+
+    public float numberdensity = 0.01f;
+    public float maxmass = 400f;
+    public float weight = 6f;
+}
+
 public class GameController : MonoBehaviour {
     public static GameController instance { get; private set; }
 
@@ -29,10 +40,29 @@ public class GameController : MonoBehaviour {
     public static int numminerals = 9; 
 
     public string[] MineralName = {"Gold", "Iridium", "Osmium", "Palladium", "Platinum", "Rhenium", "Rhodium", "Ruthenium", "Tungsten"};
-    public float[] MineralProbability = {0.3f,0.1f,0.1f,0.05f,0.3f,0.4f,0.3f,0.2f,0.1f};
     public float[] MineralValue = {10,50,70,200,20,10,20,35,70};
     public Color[] MineralColor = {Color.yellow, Color.green, Color.blue, Color.cyan, Color.red, Color.magenta, Color.gray, Color.red * Color.yellow,Color.green * Color.blue  };
     public bool[] MineralDiscovered = new bool[numminerals];
+
+    static int xsize = 5;
+    static int ysize = 5;
+
+    static float areasize = 1800f;
+
+    public int xcurr;
+    public int ycurr;
+
+    areaproperties[,] props = new areaproperties[xsize,ysize];
+
+    public areaproperties currentproperties
+    {
+        get { return props[xcurr, ycurr]; }
+    }
+
+    public Vector3 areapos
+    {
+        get { return new Vector3(areasize*Mathf.Floor((Camera.main.gameObject.transform.position.x+areasize/2) / areasize)-areasize/2, areasize*Mathf.Floor((Camera.main.gameObject.transform.position.y+areasize/2) / areasize)-areasize/2,0); }
+    }
 
 
     public bool PeriodicBCs = false;
@@ -48,6 +78,16 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        for (int i = 0; i < xsize; i++)
+        {
+            for (int j = 0; j < ysize; j++)
+            {
+                props[i, j] = new areaproperties();
+            }
+        }
+
+        props[1, 0].fogcolour = Color.red;
+
         instance = this;
 
         SpawnEnemies();
@@ -68,7 +108,7 @@ public class GameController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
             newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2), Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2));
-            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, maxAsteroidMass, 6),MineralProbability);
+            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, maxAsteroidMass, 6),currentproperties.mineralprobability);
         }
     }
 
@@ -108,5 +148,8 @@ public class GameController : MonoBehaviour {
         {
             cashtext.text = "Cash: $" + SaucerPlayer.instance.Cash;
         }
+
+        xcurr = Mathf.FloorToInt((Camera.main.gameObject.transform.position.x + areasize/2) / areasize + xsize/2) % xsize;
+        ycurr = Mathf.FloorToInt((Camera.main.gameObject.transform.position.y + areasize / 2) / areasize + ysize / 2) % ysize;
     }
 }

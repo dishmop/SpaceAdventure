@@ -34,6 +34,8 @@ public class shopscript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        transform.position = GameController.instance.areapos +  GameController.instance.currentproperties.localshoppos;
+
         Vector3 offset = SaucerPlayer.instance.transform.position - transform.position;
         Vector2 offsetnorm = new Vector2(offset.x, offset.y);
         offsetnorm.Normalize();

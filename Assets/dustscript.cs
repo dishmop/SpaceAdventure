@@ -13,5 +13,7 @@ public class dustscript : MonoBehaviour {
         transform.localScale = Camera.main.transform.localScale*1.2f;
         ps.emissionRate = transform.localScale.x;
         transform.position = Camera.main.transform.position;
+
+        ps.startColor = GameController.instance.currentproperties.fogcolour;
 	}
 }

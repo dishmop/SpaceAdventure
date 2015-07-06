@@ -98,6 +98,9 @@
     <Compile Include="Assets\Scripts\minimapcam.cs" />
     <Compile Include="Assets\Scripts\pickupscript.cs" />
     <Compile Include="Assets\dustscript.cs" />
+    <Compile Include="Assets\indicatorarrow.cs" />
+    <Compile Include="Assets\mintextscript.cs" />
+    <Compile Include="Assets\shopscript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

@@ -93,7 +93,7 @@ public class TutorialLevel : LevelAbstract {
                     ResetFade();
                     done = true;
                     largerock = (GameObject)Instantiate(junk, SaucerPlayer.instance.transform.position + new Vector3(500, 500, 0), new Quaternion());
-                    largerock.GetComponent<Rigidbody2D>().mass = 10000f;
+                    largerock.GetComponent<junkscript>().rockmass = 10000f;
                     SaucerPlayer.instance.GetComponent<Rigidbody2D>().velocity = new Vector3();
                     CameraFollow.instance.linearvel = new Vector2(0, 0);
                 }
@@ -117,7 +117,7 @@ public class TutorialLevel : LevelAbstract {
                     Destroy(largerock);
                     reset = false;
                     largerock = (GameObject)Instantiate(junk, SaucerPlayer.instance.transform.position + new Vector3(500, 500, 0), new Quaternion());
-                    largerock.GetComponent<Rigidbody2D>().mass = 10000f;
+                    largerock.GetComponent<junkscript>().rockmass = 10000f;
                     SaucerPlayer.instance.Respawn();
                     CameraFollow.instance.linearvel = new Vector2(0, 0);
                     SaucerPlayer.instance.sc.rockmass = 100;
@@ -149,7 +149,7 @@ public class TutorialLevel : LevelAbstract {
                 Fade();
                 break;
             case gamestate.Tractor1:
-                SaucerPlayer.instance.sc.tractorrange = 200f;
+                SaucerPlayer.instance.tractor = upgradelevel.medium;
                 if (ShowText("You can use a tractor beam by right-clicking.")) currentState++;
                 break;
             case gamestate.Tractor2:

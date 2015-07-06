@@ -24,11 +24,33 @@ public class SaucerPlayer : MonoBehaviour {
 
     public Text tractorbutton;
     public Text shieldbutton;
+    public Text cargobutton;
+
+    public Text repairbutton;
+    public Text sellbutton;
 
     public float maxshotmass = 10f;
 
     public upgradelevel shield = upgradelevel.none;
     public upgradelevel tractor = upgradelevel.none;
+    public upgradelevel cargo = upgradelevel.none;
+
+    public int Cash;
+
+    int mineralvalue
+    {
+        get
+        {
+            int minvalue = 0;
+
+            for (int i = 0; i < GameController.numminerals; i++)
+            {
+                minvalue += (int)(sc.mineralmass[i] * GameController.instance.MineralValue[i]);
+            }
+            return minvalue;
+        }
+    }
+    int repaircost;
 
 	// Use this for initialization
 	void Start () {
@@ -60,19 +82,35 @@ public class SaucerPlayer : MonoBehaviour {
                 break;
         }
 
+        switch (cargo)
+        {
+            case upgradelevel.none:
+                sc.maxcarriedmass = 0.1f;
+                break;
+            case upgradelevel.basic:
+                sc.maxcarriedmass = 80f;
+                break;
+            case upgradelevel.medium:
+                sc.maxcarriedmass = 200f;
+                break;
+            case upgradelevel.high:
+                sc.maxcarriedmass = 500f;
+                break;
+        }
+
         switch (shield)
         {
             case upgradelevel.none:
                 sc.shield = 0;
                 break;
             case upgradelevel.basic:
-                sc.maxshield = 100f;
+                sc.maxshield = 200;
                 break;
             case upgradelevel.medium:
-                sc.maxshield = 300f;
+                sc.maxshield = 800f;
                 break;
             case upgradelevel.high:
-                sc.maxshield = 800f;
+                sc.maxshield = 2000f;
                 break;
         }
 
@@ -108,6 +146,13 @@ public class SaucerPlayer : MonoBehaviour {
         massslider.value = sc.carriedmass / sc.maxcarriedmass;
         healthslider.value = sc.health;
         minmassslider.value = (sc.carriedmass - sc.rockmass) / sc.maxcarriedmass;
+
+        
+
+        repaircost = (int)((1 - sc.health) * 500f);
+
+        sellbutton.text = "Sell Minerals + $" + mineralvalue;
+        repairbutton.text = "Repair Ship - $" + repaircost;
 	}
 
     public void Respawn()
@@ -124,11 +169,58 @@ public class SaucerPlayer : MonoBehaviour {
         switch(tractor)
         {
             case upgradelevel.none:
-                if(GameController.instance.Cash >= 100)
+                if(Cash >= 100)
                 {
                     tractor++;
-                    GameController.instance.Cash -= 100;
+                    Cash -= 100;
                     tractorbutton.text = "Upgrade - $250";
+                }
+                break;
+            case upgradelevel.basic:
+                if(Cash >= 250)
+                {
+                    tractor++;
+                    Cash -= 250;
+                    tractorbutton.text = "Upgrade - $500";
+                }
+                break;
+            case upgradelevel.medium:
+                if (Cash >= 500)
+                {
+                    tractor++;
+                    Cash -= 500;
+                    tractorbutton.text = "Maxed";
+                }
+                break;
+        }
+    }
+
+    public void Upgradecargo()
+    {
+        switch (cargo)
+        {
+            case upgradelevel.none:
+                if (Cash >= 50)
+                {
+                    cargo++;
+                    Cash -= 50;
+                    cargobutton.text = "Upgrade - $200";
+                }
+                break;
+            case upgradelevel.basic:
+                if (Cash >= 200)
+                {
+                    cargo++;
+                    Cash -= 200;
+                    cargobutton.text = "Upgrade - $500";
+                }
+                break;
+            case upgradelevel.medium:
+                if (Cash >= 500)
+                {
+                    cargo++;
+                    Cash -= 500;
+                    cargobutton.text = "Maxed";
                 }
                 break;
         }
@@ -136,16 +228,50 @@ public class SaucerPlayer : MonoBehaviour {
 
     public void Upgradeshield()
     {
-
+        switch (shield)
+        {
+            case upgradelevel.none:
+                if (Cash >= 200)
+                {
+                    shield++;
+                    Cash -= 200;
+                    shieldbutton.text = "Upgrade - $500";
+                }
+                break;
+            case upgradelevel.basic:
+                if (Cash >= 500)
+                {
+                    shield++;
+                    Cash -= 500;
+                    shieldbutton.text = "Upgrade - $1500";
+                }
+                break;
+            case upgradelevel.medium:
+                if (Cash >= 1500)
+                {
+                    shield++;
+                    Cash -= 1500;
+                    shieldbutton.text = "Maxed";
+                }
+                break;
+        }
     }
-
-    float Pdvalue = 10;
-    float Irvalue = 20;
-    float Wvalue = 30;
 
     public void SellMinerals()
     {
-        GameController.instance.Cash += (int)(Pdvalue * sc.Pd + Irvalue * sc.Ir + Wvalue * sc.W);
-        sc.Pd = sc.Ir = sc.W = 0;
+        Cash += mineralvalue;
+        for(int i=0; i<GameController.numminerals; i++)
+        {
+            sc.mineralmass[i] = 0;
+        }
+    }
+
+    public void RepairShip()
+    {
+        if(Cash >= repaircost)
+        {
+            sc.health = 1;
+            Cash -= repaircost;
+        }
     }
 }

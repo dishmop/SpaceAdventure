@@ -26,15 +26,18 @@ public class GameController : MonoBehaviour {
     public GameObject enemy;
     public GameObject healthcrate;
 
-    public float IrProb;
-    public float PdProb;
-    public float WProb;
+    public static int numminerals = 9; 
+
+    public string[] MineralName = {"Gold", "Iridium", "Osmium", "Palladium", "Platinum", "Rhenium", "Rhodium", "Ruthenium", "Tungsten"};
+    public float[] MineralProbability = {0.3f,0.1f,0.1f,0.05f,0.3f,0.4f,0.3f,0.2f,0.1f};
+    public float[] MineralValue = {10,50,70,200,20,10,20,35,70};
+    public Color[] MineralColor = {Color.yellow, Color.green, Color.blue, Color.cyan, Color.red, Color.magenta, Color.gray, Color.red * Color.yellow,Color.green * Color.blue  };
+    public bool[] MineralDiscovered = new bool[numminerals];
+
 
     public bool PeriodicBCs = false;
 
     public float worldradius = 1000;
-
-    public int Cash;
 
     float WeightedRandom(float min, float max, float power)
     {
@@ -65,7 +68,7 @@ public class GameController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
             newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2), Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2));
-            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, maxAsteroidMass, 6),IrProb,PdProb,WProb);
+            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, maxAsteroidMass, 6),MineralProbability);
         }
     }
 
@@ -101,9 +104,9 @@ public class GameController : MonoBehaviour {
     }
 	
 	void Update () {
-        cashtext.text = "Cash: $" + Cash;
-        Wtext.text = "Tungsten: " + SaucerPlayer.instance.sc.W.ToString("F");
-        Pdtext.text = "Palladium: " + SaucerPlayer.instance.sc.Pd.ToString("F");
-        Irtext.text = "Irridium: " + SaucerPlayer.instance.sc.Ir.ToString("F");
-	}
+        if (cashtext != null)
+        {
+            cashtext.text = "Cash: $" + SaucerPlayer.instance.Cash;
+        }
+    }
 }

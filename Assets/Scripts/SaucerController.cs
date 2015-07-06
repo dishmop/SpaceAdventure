@@ -6,14 +6,26 @@ public class SaucerController : MonoBehaviour {
 
     public float rockmass;
 
-    public float Ir;
-    public float Pd;
-    public float W;
+    public float[] mineralmass = new float[GameController.numminerals];
+
+    public float totalmineralmass
+    {
+        get 
+        {
+            float tmm = 0;
+            foreach(float minmass in mineralmass)
+            {
+                tmm += minmass;
+            }
+            return tmm;
+        }
+    }
 
     public float carriedmass
     {
-    get {return rockmass + Ir + Pd + W;}
+    get {return rockmass + totalmineralmass;}
     }
+
     public float maxcarriedmass = 50;
 
     public GameController controller;
@@ -129,15 +141,26 @@ public class SaucerController : MonoBehaviour {
                 if (item.GetComponent<Rigidbody2D>() == null) return false;
 
                 rockmass += item.GetComponent<junkscript>().rockmass;
-                Ir += item.GetComponent<junkscript>().Ir;
-                Pd += item.GetComponent<junkscript>().Pd;
-                W += item.GetComponent<junkscript>().W;
+
+                for(int i=0; i<GameController.numminerals; i++)
+                {
+                    mineralmass[i] += item.GetComponent<junkscript>().mineralmass[i];
+                }
 
                 //controller.junks.Remove(item.GetComponent<Rigidbody2D>());
 
                 rb.velocity = (rb.velocity * rb.mass + item.GetComponent<Rigidbody2D>().velocity * item.GetComponent<Rigidbody2D>().mass) / (saucermass + carriedmass);
 
                 Destroy(item);
+
+
+                if (item.GetComponent<junkscript>().mineralnum >= 0)
+                {
+                    if (!GameController.instance.MineralDiscovered[item.GetComponent<junkscript>().mineralnum] && MainGame.instance != null)
+                    {
+                        MainGame.instance.DiscoverMineral(item.GetComponent<junkscript>().mineralnum);
+                    }
+                }
 
                 return true;
             }
@@ -175,7 +198,8 @@ public class SaucerController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().velocity = rb.velocity;
 
-            newjunk.GetComponent<junkscript>().Init(shotmass, 0, 0, 0);
+            float[] minprob = new float[GameController.numminerals];
+            newjunk.GetComponent<junkscript>().Init(shotmass, minprob);
 
             Vector3 impulse = arm.transform.rotation * new Vector3(shotspeed, 0, 0) * shotmass;
             newjunk.GetComponent<Rigidbody2D>().AddForce(new Vector2(impulse.x, impulse.y), ForceMode2D.Impulse);
@@ -213,20 +237,13 @@ public class SaucerController : MonoBehaviour {
 
                 position.z += 10;
 
-                //partsys.gameObject.SetActive(true);
                 beam.SetActive(true);
-
-
-                //partsys.gameObject.transform.position = position;
-                //partsys.gameObject.transform.LookAt(arm.transform);
-                //partsys.startLifetime = offset.magnitude / partsys.startSpeed;
 
                 Vector2 direction = new Vector2(offset.x, offset.y);
                 direction.Normalize();
 
                 float force = tractorstregth*100;// *(offset.magnitude - tractorlength);
                 beam.GetComponent<SpriteRenderer>().color = Color.red;
-                //partsys.startColor = Color.red * Mathf.Abs(offset.magnitude - tractorlength) / tractorlength + Color.green * (1 - Mathf.Abs(offset.magnitude - tractorlength) / tractorlength);
 
                 tractedobj.GetComponent<Rigidbody2D>().AddForceAtPosition(-force * direction, new Vector2(position.x, position.y));
                 rb.AddForce(force * direction);
@@ -234,7 +251,6 @@ public class SaucerController : MonoBehaviour {
             else
                 if (mouseoffset.magnitude < tractorrange)
                 {
-                    //partsys.gameObject.SetActive(true);
                     beam.SetActive(true);
 
                     SetBeam(arm.transform.position,location);
@@ -242,11 +258,6 @@ public class SaucerController : MonoBehaviour {
                     Vector3 pos = location;
                     pos.z += 10;
 
-                    //partsys.gameObject.transform.position = pos;
-
-                    //partsys.gameObject.transform.LookAt(arm.transform);
-                    //partsys.startLifetime = mouseoffset.magnitude / partsys.startSpeed;
-                    //partsys.startColor = Color.white;
 
                     beam.GetComponent<SpriteRenderer>().color = Color.white;
 

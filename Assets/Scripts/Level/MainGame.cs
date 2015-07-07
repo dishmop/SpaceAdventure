@@ -21,14 +21,22 @@ public class MainGame : LevelAbstract
 	void Update () {
         Fade();
 
-        if (currentmessagetext != "")
+        if(SaucerPlayer.instance.sc.dead)
         {
-            if (ShowText(currentmessagetext, 3) && SaucerPlayer.instance.tractor != upgradelevel.none) currentmessagetext = "";
+            if (ShowText("GAME OVER! Press ok to start again."))
+                Application.LoadLevel(Application.loadedLevel);
         }
-        else
-        {
-            HideText();
+        else {
+            if (currentmessagetext != "")
+            {
+                if (ShowText(currentmessagetext, 3) && SaucerPlayer.instance.tractor != upgradelevel.none) currentmessagetext = "";
+            }
+            else
+            {
+                HideText();
+            }
         }
+
 	}
 
     int numtexts = 0;

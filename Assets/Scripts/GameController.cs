@@ -10,8 +10,7 @@ public class areaproperties
     public float[] mineralprobability = {0.3f,0.1f,0.1f,0.05f,0.3f,0.4f,0.3f,0.2f,0.1f};
     public Vector3 localshoppos = new Vector3(800, 850,0);
 
-    public float numberdensity = 0.01f;
-    public float maxmass = 400f;
+    public float maxmass = 100f;
     public float weight = 6f;
 }
 
@@ -23,9 +22,12 @@ public class GameController : MonoBehaviour {
     public Text Pdtext;
     public Text Irtext;
 
-    public int NumRandomAsteroids;
-    public int NumRandomEnemies;
-    public int NumRandomPickups;
+    public float numberdensity = 0.0001f;
+
+
+    //public int NumRandomAsteroids;
+    //public int NumRandomEnemies;
+    //public int NumRandomPickups;
 
     public float maxAsteroidMass = 100f;
     public float minAsteroidMass =  1f;
@@ -86,20 +88,22 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        props[1, 0].fogcolour = Color.red;
+        props[2, 3].fogcolour = Color.red;
+        props[2, 3].maxmass = 500f;
 
         instance = this;
 
-        SpawnEnemies();
-        SpawnPickups();
+        //SpawnEnemies();
+        //SpawnPickups();
         SpawnRocks();
     }
 
     public void SpawnRocks()
     {
+        int NumRandomAsteroids = (int)(worldradius * worldradius * Mathf.PI * numberdensity);
         for (int n = 0; n < NumRandomAsteroids; n++)
         {
-            float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
+            float radius = worldradius  * Mathf.Sqrt(Random.value);
             float angle = Random.Range(0, 2 * Mathf.PI);
             Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
             Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
@@ -108,39 +112,49 @@ public class GameController : MonoBehaviour {
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
             newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2), Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2));
-            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, maxAsteroidMass, 6),currentproperties.mineralprobability);
+            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, currentproperties.maxmass, currentproperties.weight),currentproperties.mineralprobability);
         }
     }
 
-    public void SpawnEnemies()
+    //public void SpawnEnemies()
+    //{
+    //    for (int n = 0; n < NumRandomEnemies; n++)
+    //    {
+    //        float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
+    //        float angle = Random.Range(0, 2 * Mathf.PI);
+    //        Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
+    //        Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
+
+    //        GameObject newenemy = (GameObject)Instantiate(enemy, position, rotation);
+
+    //        newenemy.gameObject.GetComponent<SaucerController>().controller = this;
+    //    }
+
+    //}
+
+    //public void SpawnPickups()
+    //{
+    //    for (int n = 0; n < NumRandomPickups; n++)
+    //    {
+    //        float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
+    //        float angle = Random.Range(0, 2 * Mathf.PI);
+    //        Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
+    //        Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
+
+    //        GameObject newcrate = (GameObject)Instantiate(healthcrate, position, rotation);
+
+    //        newcrate.GetComponent<Rigidbody2D>().angularVelocity = Random.value;
+    //    }
+    //}
+
+    int getGridX(float worldX)
     {
-        for (int n = 0; n < NumRandomEnemies; n++)
-        {
-            float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
-            float angle = Random.Range(0, 2 * Mathf.PI);
-            Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
-            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
-
-            GameObject newenemy = (GameObject)Instantiate(enemy, position, rotation);
-
-            newenemy.gameObject.GetComponent<SaucerController>().controller = this;
-        }
-
+        return Mathf.FloorToInt((worldX + areasize / 2) / areasize + xsize / 2) % xsize;
     }
 
-    public void SpawnPickups()
+    int getGridY(float worldY)
     {
-        for (int n = 0; n < NumRandomPickups; n++)
-        {
-            float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
-            float angle = Random.Range(0, 2 * Mathf.PI);
-            Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
-            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
-
-            GameObject newcrate = (GameObject)Instantiate(healthcrate, position, rotation);
-
-            newcrate.GetComponent<Rigidbody2D>().angularVelocity = Random.value;
-        }
+        return Mathf.FloorToInt((worldY + areasize / 2) / areasize + ysize / 2) % ysize;
     }
 	
 	void Update () {
@@ -149,7 +163,39 @@ public class GameController : MonoBehaviour {
             cashtext.text = "Cash: $" + SaucerPlayer.instance.Cash;
         }
 
-        xcurr = Mathf.FloorToInt((Camera.main.gameObject.transform.position.x + areasize/2) / areasize + xsize/2) % xsize;
-        ycurr = Mathf.FloorToInt((Camera.main.gameObject.transform.position.y + areasize / 2) / areasize + ysize / 2) % ysize;
+        xcurr = getGridX(Camera.main.gameObject.transform.position.x);
+        ycurr = getGridY(Camera.main.gameObject.transform.position.y);
+
+        // spawn rocks to fill empty space we've moved into
+        int numNewRocks = (int)(Mathf.PI * worldradius * player.velocity.magnitude * Time.deltaTime * numberdensity);
+
+        float probabilityofextra = Mathf.PI * worldradius * player.velocity.magnitude * Time.deltaTime * numberdensity - numNewRocks;
+
+        if (Random.value < probabilityofextra)
+            numNewRocks++;
+
+        for(int i=0; i<numNewRocks; i++)
+        {
+            float radius = worldradius;
+
+            // random weighted angle between -pi/2 and pi/2
+            float randomangle = Mathf.Asin(Random.value) * (Random.value > 0.5 ? -1 : 1);
+
+            float angle = randomangle + Mathf.Atan2(player.velocity.y, player.velocity.x);
+            
+            Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
+            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
+
+            int x = getGridX(position.x);
+            int y = getGridY(position.y);
+
+            areaproperties localprops = props[x,y];
+
+            GameObject newjunk = (GameObject)Instantiate(junk, position, rotation);
+
+            newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
+            newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2), Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2));
+            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, localprops.maxmass, localprops.weight), localprops.mineralprobability);
+        }
     }
 }

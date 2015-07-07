@@ -11,7 +11,7 @@ enum gamestate
     Zoom1, Zoom2, 
     Navigate1, Navigate2, Navigate3,
     Force1, Force2, Force3,
-    Tractor1, Tractor2, Tractor3, Tractor4, Tractor5, Tractor6,
+    Tractor1, Tractor2, Tractor2a, Tractor3, Tractor4, Tractor5, Tractor6,
     Done
 };
 
@@ -140,9 +140,10 @@ public class TutorialLevel : LevelAbstract {
                 {
                     done = true;
                     SaucerPlayer.instance.Respawn();
+                    SaucerPlayer.instance.sc.rockmass = 0;
                     ResetFade();
                     Destroy(largerock);
-                    GameController.instance.NumRandomAsteroids = 500;
+                    GameController.instance.numberdensity = 0.0001f;
                     GameController.instance.SpawnRocks();
                     GameController.instance.PeriodicBCs = true;
                 }
@@ -150,10 +151,17 @@ public class TutorialLevel : LevelAbstract {
                 break;
             case gamestate.Tractor1:
                 SaucerPlayer.instance.tractor = upgradelevel.medium;
-                if (ShowText("You can use a tractor beam by right-clicking.")) currentState++;
+                ShowText("You can use a tractor beam by right-clicking.");
+
+                if (SaucerPlayer.instance.sc.beam.active) currentState++;
                 break;
             case gamestate.Tractor2:
-                if (ShowText("You can pick up green rocks by pulling them into you with the tractor beam.")) currentState++;
+                ShowText("You can pick up green rocks by pulling them into you with the tractor beam. (click and hold)");
+
+                if (SaucerPlayer.instance.sc.carriedmass > 0) currentState++;
+                break;
+            case gamestate.Tractor2a:
+                if (ShowText("You will also pick up some valuable minerals, which cannot be ejected.")) currentState++;
                 break;
             case gamestate.Tractor3:
                 if (ShowText("Red rocks are too large to be picked up.")) currentState++;

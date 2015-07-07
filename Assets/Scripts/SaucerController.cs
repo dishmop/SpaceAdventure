@@ -69,6 +69,8 @@ public class SaucerController : MonoBehaviour {
         get { return saucermass + carriedmass; }
     }
 
+    public bool tractorstabilizer = false;
+
 
 	// Use this for initialization
 	void Start () {
@@ -247,6 +249,16 @@ public class SaucerController : MonoBehaviour {
 
                 tractedobj.GetComponent<Rigidbody2D>().AddForceAtPosition(-force * direction, new Vector2(position.x, position.y));
                 rb.AddForce(force * direction);
+
+                // do force to counter orbiting
+                if (tractorstabilizer)
+                {
+                    Vector2 relvel = tractedobj.GetComponent<Rigidbody2D>().velocity - rb.velocity;
+                    relvel.Normalize();
+                    tractedobj.GetComponent<Rigidbody2D>().AddForce(-relvel * force / 2);
+
+                    rb.AddForce(relvel * force / 2);
+                }
             }
             else
                 if (mouseoffset.magnitude < tractorrange)

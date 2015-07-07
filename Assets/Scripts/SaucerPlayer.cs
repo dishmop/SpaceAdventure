@@ -29,6 +29,8 @@ public class SaucerPlayer : MonoBehaviour {
     public Text repairbutton;
     public Text sellbutton;
 
+    public Text stabilizerbutton;
+
     public float maxshotmass = 10f;
 
     public upgradelevel shield = upgradelevel.none;
@@ -120,7 +122,7 @@ public class SaucerPlayer : MonoBehaviour {
             //shoot when mouse clicked
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                float shotmass = shotsize.value * (maxshotmass - GameController.instance.minAsteroidMass) + GameController.instance.minAsteroidMass;
+                float shotmass = GameController.instance.minAsteroidMass;// shotsize.value * (maxshotmass - GameController.instance.minAsteroidMass) + GameController.instance.minAsteroidMass;
                 sc.Shoot(shotmass, cursor);
             }
         }
@@ -173,7 +175,8 @@ public class SaucerPlayer : MonoBehaviour {
                 {
                     tractor++;
                     Cash -= 100;
-                    tractorbutton.text = "Upgrade - $250";
+                    tractorbutton.text = "Upgrade range - $250";
+                    stabilizerbutton.text = "Buy Stabilizer - $1000";
                 }
                 break;
             case upgradelevel.basic:
@@ -181,7 +184,7 @@ public class SaucerPlayer : MonoBehaviour {
                 {
                     tractor++;
                     Cash -= 250;
-                    tractorbutton.text = "Upgrade - $500";
+                    tractorbutton.text = "Upgrade range - $500";
                 }
                 break;
             case upgradelevel.medium:
@@ -204,7 +207,7 @@ public class SaucerPlayer : MonoBehaviour {
                 {
                     cargo++;
                     Cash -= 50;
-                    cargobutton.text = "Upgrade - $200";
+                    cargobutton.text = "Upgrade capacity- $200";
                 }
                 break;
             case upgradelevel.basic:
@@ -212,7 +215,7 @@ public class SaucerPlayer : MonoBehaviour {
                 {
                     cargo++;
                     Cash -= 200;
-                    cargobutton.text = "Upgrade - $500";
+                    cargobutton.text = "Upgrade capacity- $500";
                 }
                 break;
             case upgradelevel.medium:
@@ -235,7 +238,7 @@ public class SaucerPlayer : MonoBehaviour {
                 {
                     shield++;
                     Cash -= 200;
-                    shieldbutton.text = "Upgrade - $500";
+                    shieldbutton.text = "Upgrade strength - $500";
                 }
                 break;
             case upgradelevel.basic:
@@ -243,7 +246,7 @@ public class SaucerPlayer : MonoBehaviour {
                 {
                     shield++;
                     Cash -= 500;
-                    shieldbutton.text = "Upgrade - $1500";
+                    shieldbutton.text = "Upgrade strength - $1500";
                 }
                 break;
             case upgradelevel.medium:
@@ -272,6 +275,16 @@ public class SaucerPlayer : MonoBehaviour {
         {
             sc.health = 1;
             Cash -= repaircost;
+        }
+    }
+
+    public void BuyStabilizer()
+    {
+        if(Cash >= 1000)
+        {
+            Cash -= 1000;
+            sc.tractorstabilizer = true;
+            stabilizerbutton.text = "Stabilizer bought";
         }
     }
 }

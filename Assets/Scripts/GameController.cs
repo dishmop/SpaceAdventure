@@ -7,11 +7,12 @@ using UnityEngine.EventSystems;
 public class areaproperties
 {
     public Color fogcolour = Color.white;
-    public float[] mineralprobability = {0.3f,0.1f,0.1f,0.05f,0.3f,0.4f,0.3f,0.2f,0.1f};
+    public float[] mineralprobability = {0.3f,0.1f,0.1f,0,0,0,0,0,0};
     public Vector3 localshoppos = new Vector3(800, 850,0);
 
     public float maxmass = 100f;
     public float weight = 6f;
+    public float maxspeed = 40f;
 }
 
 public class GameController : MonoBehaviour {
@@ -29,7 +30,7 @@ public class GameController : MonoBehaviour {
     //public int NumRandomEnemies;
     //public int NumRandomPickups;
 
-    public float maxAsteroidMass = 100f;
+    //public float maxAsteroidMass = 100f;
     public float minAsteroidMass =  1f;
 
     public Rigidbody2D player;
@@ -42,19 +43,22 @@ public class GameController : MonoBehaviour {
     public static int numminerals = 9; 
 
     public string[] MineralName = {"Gold", "Iridium", "Osmium", "Palladium", "Platinum", "Rhenium", "Rhodium", "Ruthenium", "Tungsten"};
-    public float[] MineralValue = {10,50,70,200,20,10,20,35,70};
+
+    [System.NonSerialized]
+    public float[] MineralValue = {3,4,5,10,13,17,50,70,100};
+
     public Color[] MineralColor = {Color.yellow, Color.green, Color.blue, Color.cyan, Color.red, Color.magenta, Color.gray, Color.red * Color.yellow,Color.green * Color.blue  };
     public bool[] MineralDiscovered = new bool[numminerals];
 
-    static int xsize = 5;
-    static int ysize = 5;
+    public static int xsize = 5;
+    public static int ysize = 5;
 
-    static float areasize = 1800f;
+    public static float areasize = 1800f;
 
     public int xcurr;
     public int ycurr;
 
-    areaproperties[,] props = new areaproperties[xsize,ysize];
+    public areaproperties[,] props = new areaproperties[xsize,ysize];
 
     public areaproperties currentproperties
     {
@@ -76,7 +80,7 @@ public class GameController : MonoBehaviour {
         return Mathf.Pow(Random.value, power) * (max - min) + min;
     }
 
-    public float maxobjectvelocity = 50;
+    //public float maxobjectvelocity = 50;
 
 	// Use this for initialization
 	void Start () {
@@ -90,6 +94,20 @@ public class GameController : MonoBehaviour {
 
         props[2, 3].fogcolour = Color.red;
         props[2, 3].maxmass = 500f;
+
+        props[2, 1].fogcolour = Color.yellow;
+        props[2, 3].maxspeed = 100f;
+        props[2, 3].maxmass = 50f;
+
+        props[1, 2].fogcolour = Color.green;
+        props[1, 2].maxmass = 200f;
+        props[1, 2].mineralprobability[3] = 0.3f;
+        props[1, 2].mineralprobability[4] = 0.2f;
+        props[1, 2].mineralprobability[5] = 0.1f;
+
+        props[3, 2].fogcolour = Color.blue;
+        props[3, 2].maxmass = 400f;
+        props[3, 2].maxspeed = 50f;
 
         instance = this;
 
@@ -111,8 +129,7 @@ public class GameController : MonoBehaviour {
             GameObject newjunk = (GameObject)Instantiate(junk, position, rotation);
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
-            newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2), Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2));
-            newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, currentproperties.maxmass, currentproperties.weight),currentproperties.mineralprobability);
+            newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-currentproperties.maxspeed, currentproperties.maxspeed) / Mathf.Sqrt(2), Random.Range(-currentproperties.maxspeed, currentproperties.maxspeed) / Mathf.Sqrt(2)); newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, currentproperties.maxmass, currentproperties.weight), currentproperties.mineralprobability);
         }
     }
 
@@ -194,7 +211,7 @@ public class GameController : MonoBehaviour {
             GameObject newjunk = (GameObject)Instantiate(junk, position, rotation);
 
             newjunk.GetComponent<Rigidbody2D>().angularVelocity = Random.Range(-5f, 5f);
-            newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2), Random.Range(-maxobjectvelocity, maxobjectvelocity) / Mathf.Sqrt(2));
+            newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-currentproperties.maxspeed, currentproperties.maxspeed) / Mathf.Sqrt(2), Random.Range(-currentproperties.maxspeed, currentproperties.maxspeed) / Mathf.Sqrt(2));
             newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, localprops.maxmass, localprops.weight), localprops.mineralprobability);
         }
     }

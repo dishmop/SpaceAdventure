@@ -42,7 +42,7 @@ public class TutorialLevel : LevelAbstract {
                 if (ShowText("This is your ship.")) currentState++;
                 break;
             case gamestate.Zoom1:
-                if (ShowText("Click the scrollwheel and move the mouse to zoom in/out.")) currentState++;
+                if (ShowText("Click the scrollwheel or use the slider to zoom.")) currentState++;
                 break;
             case gamestate.Zoom2:
                 zoomhighlight.SetActive(true);

@@ -6,6 +6,8 @@ public class mintextscript : MonoBehaviour {
     public int mineralnumber;
     Text text;
 
+    public Image halo;
+
 	// Use this for initialization
 	void Start () {
         text = GetComponent<Text>();
@@ -14,5 +16,6 @@ public class mintextscript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	    text.text = GameController.instance.MineralName[mineralnumber] + ": " + SaucerPlayer.instance.sc.mineralmass[mineralnumber].ToString("F")+"kg";
-	}
+        halo.color = GameController.instance.MineralColor[mineralnumber];
+    }
 }

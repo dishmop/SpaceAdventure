@@ -22,7 +22,7 @@ public class ObjectController : MonoBehaviour {
             {
                 rb.position -= 2 * GameController.instance.worldradius * displacement.normalized;
 
-                float speed = Mathf.Clamp(rb.velocity.magnitude, 0, GameController.instance.maxobjectvelocity);
+                float speed = Mathf.Clamp(rb.velocity.magnitude, 0, GameController.instance.currentproperties.maxspeed);
 
                 rb.velocity = new Vector2(Random.Range(-speed, speed) / sqrt2, Random.Range(-speed, speed) / sqrt2);
             }

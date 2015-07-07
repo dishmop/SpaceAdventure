@@ -23,7 +23,7 @@ public class shopscript : MonoBehaviour {
 
     float radius = 69;
     float tractorrange = 200;
-    float tractornaturallength = 150f;
+    float tractornaturallength = 100f;
     float tractorstrength = 100f;
 
     float A = 10;
@@ -42,27 +42,23 @@ public class shopscript : MonoBehaviour {
 
         offsetlength = offset.magnitude;
 
-	    if(offset.magnitude<tractorrange)
+        Vector2 relvel = SaucerPlayer.instance.GetComponent<Rigidbody2D>().velocity - GetComponent<Rigidbody2D>().velocity;
+
+        float speedtowards = Mathf.Clamp(-Vector2.Dot(relvel, offsetnorm), 0, float.MaxValue);
+
+        if (offset.magnitude < tractorrange)
         {
             shopbutton.SetActive(true);
             beam.SetActive(true);
             SetBeam(transform.position, transform.position + offset);
 
-            float B = A / ((tractornaturallength - radius) * (tractornaturallength - radius));
+            float amount = 1- 2*(offsetlength - tractornaturallength)/(tractorrange-tractornaturallength);
+            amount = Mathf.Clamp01(amount);
 
+            float playermass = SaucerPlayer.instance.GetComponent<Rigidbody2D>().mass;
 
-            if(offset.magnitude < tractornaturallength)
-            {
-                forcestrength = A / ((offsetlength - radius) * (offsetlength - radius)) - B;
-
-                GetComponent<Rigidbody2D>().AddForce(-offsetnorm * forcestrength);
-                SaucerPlayer.instance.GetComponent<Rigidbody2D>().AddForce(offsetnorm * forcestrength);
-            }
-            //else if(offset.magnitude > tractornaturallength)
-            //{
-            //    //GetComponent<Rigidbody2D>().AddForce(offsetnorm * tractorstrength);
-            //    //SaucerPlayer.instance.GetComponent<Rigidbody2D>().AddForce(-offsetnorm * tractorstrength);
-            //}
+            GetComponent<Rigidbody2D>().AddForce(- playermass *amount * speedtowards * offsetnorm,ForceMode2D.Impulse);
+            SaucerPlayer.instance.GetComponent<Rigidbody2D>().AddForce(playermass * amount * speedtowards * offsetnorm, ForceMode2D.Impulse);
         }
         else
         {

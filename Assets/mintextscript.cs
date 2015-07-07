@@ -15,7 +15,7 @@ public class mintextscript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    text.text = GameController.instance.MineralName[mineralnumber] + ": " + SaucerPlayer.instance.sc.mineralmass[mineralnumber].ToString("F")+"kg";
+        text.text = GameController.instance.MineralName[mineralnumber] + " @ $" + GameController.instance.MineralValue[mineralnumber].ToString("F0") + "/kg : " + SaucerPlayer.instance.sc.mineralmass[mineralnumber].ToString("F") + "kg";
         halo.color = GameController.instance.MineralColor[mineralnumber];
     }
 }

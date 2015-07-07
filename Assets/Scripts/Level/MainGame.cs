@@ -29,7 +29,19 @@ public class MainGame : LevelAbstract
         else {
             if (currentmessagetext != "")
             {
-                if (ShowText(currentmessagetext, 3) && SaucerPlayer.instance.tractor != upgradelevel.none) currentmessagetext = "";
+                if (ShowText(currentmessagetext, 3))
+                {
+                    if (currentmessagetext == "Click the 'Shop' button and buy a tractor beam and cargo bay.")
+                    {
+                        if (SaucerPlayer.instance.tractor != upgradelevel.none && SaucerPlayer.instance.cargo != upgradelevel.none)
+                        {
+                            currentmessagetext = "Now pick up some rocks and throw them out to move around.";
+                        }
+                    } else
+                    {
+                        currentmessagetext = "";
+                    }
+                }
             }
             else
             {

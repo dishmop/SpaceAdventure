@@ -94,7 +94,7 @@ public class SaucerController : MonoBehaviour {
         }
 
         rb.mass = mass;
-        transform.localScale = new Vector3(Mathf.Sqrt(saucermass), Mathf.Sqrt(saucermass), 1);
+        transform.localScale = new Vector3(Mathf.Sqrt(saucermass), Mathf.Sqrt(saucermass), Mathf.Sqrt(saucermass));
 
         if(!dead)
             shield += maxshield* shieldregen * Time.deltaTime;

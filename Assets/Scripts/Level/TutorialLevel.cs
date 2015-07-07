@@ -161,10 +161,10 @@ public class TutorialLevel : LevelAbstract {
                 if (SaucerPlayer.instance.sc.carriedmass > 0) currentState++;
                 break;
             case gamestate.Tractor2a:
-                if (ShowText("You will also pick up some valuable minerals, which cannot be ejected.")) currentState++;
+                if (ShowText("You will also pick up some valuable minerals, which cannot be ejected (black on the mass bar).")) currentState++;
                 break;
             case gamestate.Tractor3:
-                if (ShowText("Red rocks are too large to be picked up.")) currentState++;
+                if (ShowText("Rocks are red when you don't have enough space to pick them up.")) currentState++;
                 break;
             case gamestate.Tractor4:
                 if (ShowText("The beam exerts an attractive force on the rock.")) currentState++;
@@ -176,7 +176,7 @@ public class TutorialLevel : LevelAbstract {
                 if (ShowText("This means that you are also pulling the ship towards the rock! You can use this to get around.")) currentState++;
                 break;
             case gamestate.Done:
-                if (ShowText("Tutorial complete! Press ok to enter the game.")) Application.LoadLevel(1);
+                if (ShowText("Tutorial complete! Press ok to start a new game.")) Application.LoadLevel(1);
                 break;
             default:
                 HideText();

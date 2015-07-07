@@ -16,10 +16,10 @@ public class indicatorarrow : MonoBehaviour {
 
         float angle = Mathf.Rad2Deg*Mathf.Atan2(-offset.y, -offset.x);
 
-        pos += offset.normalized * Camera.main.orthographicSize*0.7f;
+        pos += offset.normalized * Camera.main.orthographicSize*0.8f;
         transform.position = pos;
 
-        transform.localScale = new Vector3(Camera.main.orthographicSize * 0.3f, Camera.main.orthographicSize*0.3f, 1);
+        transform.localScale = new Vector3(Camera.main.orthographicSize * 0.1f, Camera.main.orthographicSize*0.1f, 1);
 
         transform.rotation = Quaternion.AngleAxis(angle, new Vector3(0, 0, 1));
 

@@ -19,18 +19,9 @@ public class GameController : MonoBehaviour {
     public static GameController instance { get; private set; }
 
     public Text cashtext;
-    public Text Wtext;
-    public Text Pdtext;
-    public Text Irtext;
 
     public float numberdensity = 0.0001f;
 
-
-    //public int NumRandomAsteroids;
-    //public int NumRandomEnemies;
-    //public int NumRandomPickups;
-
-    //public float maxAsteroidMass = 100f;
     public float minAsteroidMass =  1f;
 
     public Rigidbody2D player;
@@ -40,14 +31,18 @@ public class GameController : MonoBehaviour {
     public GameObject enemy;
     public GameObject healthcrate;
 
-    public static int numminerals = 9; 
+    public static int numminerals = 9;
 
+    [System.NonSerialized]
     public string[] MineralName = {"Gold", "Iridium", "Osmium", "Palladium", "Platinum", "Rhenium", "Rhodium", "Ruthenium", "Tungsten"};
 
     [System.NonSerialized]
     public float[] MineralValue = {3,4,5,10,13,17,50,70,100};
 
+    [System.NonSerialized]
     public Color[] MineralColor = {Color.yellow, Color.green, Color.blue, Color.cyan, Color.red, Color.magenta, Color.gray, Color.red * Color.yellow,Color.green * Color.blue  };
+ 
+    [System.NonSerialized]
     public bool[] MineralDiscovered = new bool[numminerals];
 
     public static int xsize = 5;
@@ -80,7 +75,6 @@ public class GameController : MonoBehaviour {
         return Mathf.Pow(Random.value, power) * (max - min) + min;
     }
 
-    //public float maxobjectvelocity = 50;
 
 	// Use this for initialization
 	void Start () {
@@ -111,8 +105,6 @@ public class GameController : MonoBehaviour {
 
         instance = this;
 
-        //SpawnEnemies();
-        //SpawnPickups();
         SpawnRocks();
     }
 
@@ -132,37 +124,6 @@ public class GameController : MonoBehaviour {
             newjunk.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-currentproperties.maxspeed, currentproperties.maxspeed) / Mathf.Sqrt(2), Random.Range(-currentproperties.maxspeed, currentproperties.maxspeed) / Mathf.Sqrt(2)); newjunk.GetComponent<junkscript>().Init(WeightedRandom(minAsteroidMass, currentproperties.maxmass, currentproperties.weight), currentproperties.mineralprobability);
         }
     }
-
-    //public void SpawnEnemies()
-    //{
-    //    for (int n = 0; n < NumRandomEnemies; n++)
-    //    {
-    //        float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
-    //        float angle = Random.Range(0, 2 * Mathf.PI);
-    //        Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
-    //        Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
-
-    //        GameObject newenemy = (GameObject)Instantiate(enemy, position, rotation);
-
-    //        newenemy.gameObject.GetComponent<SaucerController>().controller = this;
-    //    }
-
-    //}
-
-    //public void SpawnPickups()
-    //{
-    //    for (int n = 0; n < NumRandomPickups; n++)
-    //    {
-    //        float radius = (worldradius - 5) * Mathf.Sqrt(Random.value);
-    //        float angle = Random.Range(0, 2 * Mathf.PI);
-    //        Vector3 position = player.gameObject.transform.position + new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
-    //        Quaternion rotation = Quaternion.AngleAxis(Random.Range(-180, 180), new Vector3(0, 0, 1));
-
-    //        GameObject newcrate = (GameObject)Instantiate(healthcrate, position, rotation);
-
-    //        newcrate.GetComponent<Rigidbody2D>().angularVelocity = Random.value;
-    //    }
-    //}
 
     int getGridX(float worldX)
     {

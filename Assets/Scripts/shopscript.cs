@@ -21,12 +21,9 @@ public class shopscript : MonoBehaviour {
 	
 	}
 
-    float radius = 69;
     float tractorrange = 200;
     float tractornaturallength = 100f;
-    float tractorstrength = 100f;
-
-    float A = 10;
+    
 
     public float forcestrength;
 

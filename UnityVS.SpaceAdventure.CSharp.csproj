@@ -91,18 +91,18 @@
     <Compile Include="Assets\Scripts\SaucerController.cs" />
     <Compile Include="Assets\Scripts\SaucerPlayer.cs" />
     <Compile Include="Assets\Scripts\ShipController.cs" />
+    <Compile Include="Assets\Scripts\areasquare.cs" />
     <Compile Include="Assets\Scripts\backgroundmover.cs" />
+    <Compile Include="Assets\Scripts\dustscript.cs" />
     <Compile Include="Assets\Scripts\gridOverlay.cs" />
+    <Compile Include="Assets\Scripts\indicatorarrow.cs" />
     <Compile Include="Assets\Scripts\junkcollector.cs" />
     <Compile Include="Assets\Scripts\junkscript.cs" />
     <Compile Include="Assets\Scripts\minimapcam.cs" />
+    <Compile Include="Assets\Scripts\mintextscript.cs" />
     <Compile Include="Assets\Scripts\pickupscript.cs" />
-    <Compile Include="Assets\areasquare.cs" />
-    <Compile Include="Assets\dustscript.cs" />
-    <Compile Include="Assets\indicatorarrow.cs" />
-    <Compile Include="Assets\mintextscript.cs" />
-    <Compile Include="Assets\quitscript.cs" />
-    <Compile Include="Assets\shopscript.cs" />
+    <Compile Include="Assets\Scripts\quitscript.cs" />
+    <Compile Include="Assets\Scripts\shopscript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

@@ -125,14 +125,19 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    int mod(int a, int b)
+    {
+        return ((a % b) + b) % b;
+    }
+
     int getGridX(float worldX)
     {
-        return Mathf.FloorToInt((worldX + areasize / 2) / areasize + xsize / 2) % xsize;
+        return mod(Mathf.FloorToInt((worldX + areasize / 2) / areasize + xsize / 2), xsize);
     }
 
     int getGridY(float worldY)
     {
-        return Mathf.FloorToInt((worldY + areasize / 2) / areasize + ysize / 2) % ysize;
+        return mod(Mathf.FloorToInt((worldY + areasize / 2) / areasize + ysize / 2), ysize);
     }
 	
 	void Update () {

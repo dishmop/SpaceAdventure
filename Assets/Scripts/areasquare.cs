@@ -21,6 +21,32 @@ public class areasquare : MonoBehaviour {
 
         float worldx = areasize * (float)(x - nx / 2) ;
         float worldy = areasize * (float)(y - ny / 2) ;
+
+        float playerx = SaucerPlayer.instance.transform.position.x;
+        float playery = SaucerPlayer.instance.transform.position.y;
+
+        float worldwidth = nx * areasize;
+        float worldheight = ny * areasize;
+
+        while(worldx > playerx + worldwidth/2)
+        {
+            worldx -= worldwidth;
+        }
+        while(worldx < playerx - worldwidth/2)
+        {
+            worldx += worldwidth;
+        }
+
+        while (worldy > playery + worldheight / 2)
+        {
+            worldy -= worldheight;
+        }
+        while (worldy < playery - worldheight / 2)
+        {
+            worldy += worldheight;
+        }
+
+
         transform.position = new Vector3(worldx, worldy, 0);
 
 	}

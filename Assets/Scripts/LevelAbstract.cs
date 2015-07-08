@@ -52,6 +52,8 @@ public abstract class LevelAbstract : MonoBehaviour {
             messagepanel.GetComponent<Image>().color = col;
 
             finished = false;
+
+            messagepanel.GetComponent<AudioSource>().Play();
         }
         else
         {

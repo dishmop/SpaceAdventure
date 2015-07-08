@@ -31,6 +31,9 @@ public class SaucerPlayer : MonoBehaviour {
 
     public Text stabilizerbutton;
 
+    public AudioSource beamsound;
+    public AudioSource buttonsound;
+
     public float maxshotmass = 10f;
 
     public upgradelevel shield = upgradelevel.none;
@@ -136,6 +139,37 @@ public class SaucerPlayer : MonoBehaviour {
             sc.Tractor(false, new Vector3(cursor.x, cursor.y));
         }
 
+        //if( Input.GetKeyDown(KeyCode.Mouse1))
+        //{
+        //    if(tractor != upgradelevel.none)
+        //    {
+        //        beamsound.Play();
+        //    }
+        //}
+
+        //if(Input.GetKeyUp(KeyCode.Mouse1))
+        //{
+        //    beamsound.Stop();
+        //}
+
+        if(sc.beam.active)
+        {
+            if(!beamsound.isPlaying)
+                beamsound.Play();
+
+            if(sc.tractedobj!=null)
+            {
+                beamsound.pitch = 0.75f;
+            } else
+            {
+                beamsound.pitch = 0.7f;
+            }
+        }
+        else
+        {
+            beamsound.Stop();
+        }
+
         if (Input.GetKey(KeyCode.Space))
         {
             rb.angularDrag = 5;
@@ -173,6 +207,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.none:
                 if(Cash >= 100)
                 {
+                    buttonsound.Play();
+
                     tractor++;
                     Cash -= 100;
                     tractorbutton.text = "Upgrade range - $250";
@@ -182,6 +218,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.basic:
                 if(Cash >= 250)
                 {
+                    buttonsound.Play();
+
                     tractor++;
                     Cash -= 250;
                     tractorbutton.text = "Upgrade range - $500";
@@ -190,6 +228,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.medium:
                 if (Cash >= 500)
                 {
+                    buttonsound.Play();
+
                     tractor++;
                     Cash -= 500;
                     tractorbutton.text = "Maxed";
@@ -205,6 +245,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.none:
                 if (Cash >= 50)
                 {
+                    buttonsound.Play();
+
                     cargo++;
                     Cash -= 50;
                     cargobutton.text = "Upgrade capacity- $200";
@@ -213,6 +255,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.basic:
                 if (Cash >= 200)
                 {
+                    buttonsound.Play();
+
                     cargo++;
                     Cash -= 200;
                     cargobutton.text = "Upgrade capacity- $500";
@@ -221,6 +265,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.medium:
                 if (Cash >= 500)
                 {
+                    buttonsound.Play();
+
                     cargo++;
                     Cash -= 500;
                     cargobutton.text = "Maxed";
@@ -236,6 +282,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.none:
                 if (Cash >= 200)
                 {
+                    buttonsound.Play();
+
                     shield++;
                     Cash -= 200;
                     shieldbutton.text = "Upgrade strength - $500";
@@ -244,6 +292,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.basic:
                 if (Cash >= 500)
                 {
+                    buttonsound.Play();
+
                     shield++;
                     Cash -= 500;
                     shieldbutton.text = "Upgrade strength - $1500";
@@ -252,6 +302,8 @@ public class SaucerPlayer : MonoBehaviour {
             case upgradelevel.medium:
                 if (Cash >= 1500)
                 {
+                    buttonsound.Play();
+
                     shield++;
                     Cash -= 1500;
                     shieldbutton.text = "Maxed";
@@ -262,6 +314,8 @@ public class SaucerPlayer : MonoBehaviour {
 
     public void SellMinerals()
     {
+        buttonsound.Play();
+
         Cash += mineralvalue;
         for(int i=0; i<GameController.numminerals; i++)
         {
@@ -273,6 +327,8 @@ public class SaucerPlayer : MonoBehaviour {
     {
         if(Cash >= repaircost)
         {
+            buttonsound.Play();
+
             sc.health = 1;
             Cash -= repaircost;
         }
@@ -282,6 +338,7 @@ public class SaucerPlayer : MonoBehaviour {
     {
         if(Cash >= 1000)
         {
+            buttonsound.Play();
             Cash -= 1000;
             sc.tractorstabilizer = true;
             stabilizerbutton.text = "Stabilizer bought";

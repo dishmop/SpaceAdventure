@@ -33,6 +33,10 @@ public class SaucerController : MonoBehaviour {
     public GameObject arm;
     public GameObject shieldobj;
 
+    public AudioSource burningsound;
+    public AudioSource pickupsound;
+    public AudioSource shootsound;
+
     public ParticleSystem smokesys;
 
     public GameObject beam;
@@ -106,6 +110,7 @@ public class SaucerController : MonoBehaviour {
         timesinceshot += Time.deltaTime;
 
         smokesys.emissionRate = Mathf.Clamp(100 * (1 - health),0,100);
+        burningsound.volume = Mathf.Clamp((1 - health), 0, 1);
 
         health = Mathf.Clamp(health, 0, 1);
 
@@ -155,6 +160,8 @@ public class SaucerController : MonoBehaviour {
 
                 Destroy(item);
 
+                pickupsound.Play();
+
 
                 if (item.GetComponent<junkscript>().mineralnum >= 0)
                 {
@@ -189,6 +196,8 @@ public class SaucerController : MonoBehaviour {
     {
         if (!dead && rockmass >= shotmass && timesinceshot > reloadtimepermass * shotmass)
         {
+            shootsound.Play();
+
             Vector3 offset = shootat - arm.transform.position;
             arm.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(offset.y, offset.x), new Vector3(0, 0, 1));
 

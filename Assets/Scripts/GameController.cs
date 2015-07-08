@@ -6,13 +6,13 @@ using UnityEngine.EventSystems;
 
 public class areaproperties
 {
-    public Color fogcolour = Color.white;
-    public float[] mineralprobability = {0.3f,0.1f,0.1f,0,0,0,0,0,0};
-    public Vector3 localshoppos = new Vector3(800, 850,0);
+    public Color fogcolour = Color.red;
+    public float[] mineralprobability = {0.1f,0.1f,0.1f,0,0,0,0.003f,0.002f,0.001f};
+    public Vector3 localshoppos = new Vector3(900, 850,0);
 
-    public float maxmass = 100f;
+    public float maxmass = 300f;
     public float weight = 6f;
-    public float maxspeed = 40f;
+    public float maxspeed = 80f;
 }
 
 public class GameController : MonoBehaviour {
@@ -25,11 +25,8 @@ public class GameController : MonoBehaviour {
     public float minAsteroidMass =  1f;
 
     public Rigidbody2D player;
-    public GameObject arm;
     public GameObject junk;
     public GameObject cam;
-    public GameObject enemy;
-    public GameObject healthcrate;
 
     public static int numminerals = 9;
 
@@ -86,7 +83,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        props[2, 3].fogcolour = Color.red;
+        props[2, 3].fogcolour = Color.magenta;
         props[2, 3].maxmass = 500f;
 
         props[2, 1].fogcolour = Color.yellow;
@@ -102,6 +99,14 @@ public class GameController : MonoBehaviour {
         props[3, 2].fogcolour = Color.blue;
         props[3, 2].maxmass = 400f;
         props[3, 2].maxspeed = 50f;
+
+        props[2,2].fogcolour = Color.white;
+        props[2,2]. mineralprobability = new float[]{0.3f,0.1f,0.1f,0,0,0,0,0,0};
+        props[2,2]. localshoppos = new Vector3(800, 850,0);
+
+        props[2,2]. maxmass = 100f;
+        props[2,2]. weight = 6f;
+        props[2,2]. maxspeed = 40f;
 
         instance = this;
 

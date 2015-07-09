@@ -176,7 +176,7 @@ public class TutorialLevel : LevelAbstract {
                 if (ShowText("This means that you are also pulling the ship towards the rock! You can use this to get around.")) currentState++;
                 break;
             case gamestate.Done:
-                if (ShowText("Tutorial complete! Press ok to start a new game.")) Application.LoadLevel(1);
+                if (ShowText("Tutorial complete! Press ok to start a new game.")) Application.LoadLevel(2);
                 break;
             default:
                 HideText();

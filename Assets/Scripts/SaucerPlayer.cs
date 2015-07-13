@@ -250,6 +250,9 @@ public class SaucerPlayer : MonoBehaviour {
                     cargo++;
                     Cash -= 50;
                     cargobutton.text = "Upgrade capacity- $200";
+
+                    Update();
+                    sc.rockmass = sc.maxcarriedmass / 2;
                 }
                 break;
             case upgradelevel.basic:
@@ -260,6 +263,9 @@ public class SaucerPlayer : MonoBehaviour {
                     cargo++;
                     Cash -= 200;
                     cargobutton.text = "Upgrade capacity- $500";
+
+                    Update();
+                    sc.rockmass = sc.maxcarriedmass / 2;
                 }
                 break;
             case upgradelevel.medium:
@@ -270,6 +276,9 @@ public class SaucerPlayer : MonoBehaviour {
                     cargo++;
                     Cash -= 500;
                     cargobutton.text = "Maxed";
+
+                    Update();
+                    sc.rockmass = sc.maxcarriedmass / 2;
                 }
                 break;
         }

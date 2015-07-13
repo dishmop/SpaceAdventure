@@ -151,12 +151,12 @@ public class TutorialLevel : LevelAbstract {
                 break;
             case gamestate.Tractor1:
                 SaucerPlayer.instance.tractor = upgradelevel.medium;
-                ShowText("You can use a tractor beam by right-clicking.");
+                ShowText("You can use a tractor beam by right-clicking.",1);
 
                 if (SaucerPlayer.instance.sc.beam.active) currentState++;
                 break;
             case gamestate.Tractor2:
-                ShowText("You can pick up green rocks by pulling them into you with the tractor beam. (click and hold)");
+                ShowText("You can pick up green rocks by pulling them into you with the tractor beam. (click and hold)",1);
 
                 if (SaucerPlayer.instance.sc.carriedmass > 0) currentState++;
                 break;

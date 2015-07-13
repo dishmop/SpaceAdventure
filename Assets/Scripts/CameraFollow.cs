@@ -80,6 +80,11 @@ public class CameraFollow : MonoBehaviour {
             GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse Y") * 5f;
             zoombar.value = (GetComponent<Camera>().orthographicSize - minzoom) / (maxzoom - minzoom);
         }
+        else if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * 50f;
+            zoombar.value = (GetComponent<Camera>().orthographicSize - minzoom) / (maxzoom - minzoom);
+        }
         else
         {
             GetComponent<Camera>().orthographicSize = minzoom + (maxzoom - minzoom) * zoombar.value;

@@ -112,7 +112,7 @@ public class TutorialLevel : LevelAbstract {
                 ShowText("Try to navigate to the large red rock on your minimap.",1);
                 ShowReset();
                 Fade();
-                if(reset)
+                if(reset || (largerock.transform.position -SaucerPlayer.instance.transform.position).magnitude > GameController.instance.worldradius)
                 {
                     Destroy(largerock);
                     reset = false;

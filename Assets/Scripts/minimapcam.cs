@@ -10,7 +10,7 @@ public class minimapcam : MonoBehaviour {
     float size;
     float mainsize;
 
-    public gridOverlay go;
+    //public gridOverlay go;
 
 	// Use this for initialization
 	void Start () {

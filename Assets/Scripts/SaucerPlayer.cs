@@ -152,7 +152,7 @@ public class SaucerPlayer : MonoBehaviour {
         //    beamsound.Stop();
         //}
 
-        if(sc.beam.active)
+        if(sc.beam.activeSelf)
         {
             if(!beamsound.isPlaying)
                 beamsound.Play();

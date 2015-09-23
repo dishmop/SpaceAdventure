@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour {
     public static CameraFollow instance { get; private set; }
 
     public Rigidbody2D following;
-    public backgroundmover bg;
+    //public backgroundmover bg;
 
     public GameObject minimapcube;
 
@@ -93,8 +93,8 @@ public class CameraFollow : MonoBehaviour {
         //GetComponent<Camera>().orthographicSize -= Input.GetAxis("Mouse ScrollWheel")*3f;
 
         GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minzoom, maxzoom);
-        float bgsize = GetComponent<Camera>().orthographicSize / 2.4f;
-        bg.gameObject.transform.localScale = new Vector3(bgsize,bgsize,1);
+        //float bgsize = GetComponent<Camera>().orthographicSize / 2.4f;
+        //bg.gameObject.transform.localScale = new Vector3(bgsize,bgsize,1);
 
         Vector3 camerasize1 = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0)) - Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
         Vector3 camerasize2 = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)) - Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));

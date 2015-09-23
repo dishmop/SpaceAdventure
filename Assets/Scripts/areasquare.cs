@@ -5,7 +5,7 @@ public class areasquare : MonoBehaviour {
     public int x;
     public int y;
 
-    public SpriteRenderer renderer;
+    new public SpriteRenderer renderer;
 
 	// Use this for initialization
 	void Start () {

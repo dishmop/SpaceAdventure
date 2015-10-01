@@ -104,6 +104,7 @@
     <Compile Include="Assets\Scripts\shopscript.cs" />
     <Compile Include="Assets\backgrounds.cs" />
     <Compile Include="Assets\menuscript.cs" />
+    <Compile Include="Assets\shopcloser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

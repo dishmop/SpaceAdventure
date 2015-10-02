@@ -84,9 +84,26 @@ public class junkscript : MonoBehaviour {
 
 
         if (rb.mass < GameController.instance.player.GetComponent<SaucerController>().maxcarriedmass - GameController.instance.player.GetComponent<SaucerController>().carriedmass)
-            GetComponentInChildren<SpriteRenderer>().color = Color.green + Color.grey;
+        {
+
+            foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
+            {
+                if (sr.sprite.name == "junk")
+                {
+                    sr.color = Color.green + Color.grey;
+                }
+            }
+        }
         else
-            GetComponentInChildren<SpriteRenderer>().color = Color.red + Color.grey;
+        {
+            foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
+            {
+                if (sr.sprite.name == "junk")
+                {
+                    sr.color = Color.red + Color.grey;
+                }
+            }
+        }
 
 	}
 }

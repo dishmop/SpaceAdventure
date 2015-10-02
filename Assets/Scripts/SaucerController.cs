@@ -135,7 +135,7 @@ public class SaucerController : MonoBehaviour {
             shield -= impulsemag;
 
             if (shield < 0)
-                health += shield / 10000;
+                health += shield / 50000;
         }
     }
 

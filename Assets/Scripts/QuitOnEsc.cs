@@ -13,13 +13,18 @@ public class QuitOnEsc : MonoBehaviour {
 		
 		// Test for exit
 		if (UnityEngine.Input.GetKeyDown (KeyCode.Escape)) {
-			if (OnQuitLevelName != null && OnQuitLevelName != ""){
-				Application.LoadLevel(OnQuitLevelName);
-			}
-			else{
-				Quit();
-			}
+			TriggerQuit();
 		}
+	}
+	
+	public void TriggerQuit(){
+		if (OnQuitLevelName != null && OnQuitLevelName != ""){
+			Application.LoadLevel(OnQuitLevelName);
+		}
+		else{
+			Quit();
+		}
+		
 	}
 	
 	//#if UNITY_WEBPLAYER

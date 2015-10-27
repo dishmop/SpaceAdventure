@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;   
+using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 //different tutorial states
 enum gamestate
@@ -24,17 +26,28 @@ public class TutorialLevel : LevelAbstract {
     GameObject largerock;
 
     gamestate currentState;
+	gamestate lastState;
 
 	// Use this for initialization
 	void Start () {
         currentState = gamestate.Welcome1;
+		lastState = gamestate.Done;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		bool onEnterState = (currentState != lastState);
+		lastState = currentState;
+		
 	    switch(currentState)
         {
             case gamestate.Welcome1:
+				if (onEnterState){
+//					Debug.Log("tut01Welcome1 - gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut01Welcome1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					
+				
+				}
                 if (ShowText("Welcome.",2)) currentState++;
                 Fade();
                 break;
@@ -52,6 +65,10 @@ public class TutorialLevel : LevelAbstract {
                     currentState++;
                 break;
             case gamestate.Shoot1:
+				if (onEnterState){
+//					Debug.Log("tut02Shoot1 - gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut02Shoot1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				}
                 
                 if (ShowText("You can carry a certain amount of rock")) currentState++;
                 break;
@@ -73,6 +90,10 @@ public class TutorialLevel : LevelAbstract {
                 if (SaucerPlayer.instance.sc.carriedmass < 50) currentState++;
                 break;
             case gamestate.Momentum1:
+				if (onEnterState){
+//					Debug.Log("tut03Momentum1 - gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut03Momentum1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				}
                 if (ShowText("You are giving a mass of rock a certain velocity, that is, you are giving it momentum.")) currentState++;
                 break;
             case gamestate.Momentum2:
@@ -85,6 +106,12 @@ public class TutorialLevel : LevelAbstract {
                 if (ShowText("You can use this to move the ship.", -1)) currentState++;
                 break;
             case gamestate.Navigate1:
+				if (onEnterState){
+//					Debug.Log("tut04Navigate1 - gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut04Navigate1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				
+				}
+				
                 zoomhighlight.SetActive(false);
                 SaucerPlayer.instance.sc.rockmass = 0;
                 Fade();
@@ -104,6 +131,11 @@ public class TutorialLevel : LevelAbstract {
                 if (ShowText("This means you'll keep going forever, since there is no air resistance in space!")) currentState++;
                 break;
             case gamestate.Navigate3:
+				if (onEnterState){
+//					Debug.Log("tut05Navigate3- gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut05Navigate3", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				
+				}
                 if (!done)
                 {
                     done = true;
@@ -127,6 +159,11 @@ public class TutorialLevel : LevelAbstract {
                     currentState++;
                 break;
             case gamestate.Force1:
+				if (onEnterState){
+//					Debug.Log("tut06Force1 - gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut06Force1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				}
+				
                 HideReset();
                 if(ShowText("Recall that force is the rate of change of momentum (Newton's Second Law).")) currentState++;
                 break;
@@ -150,6 +187,11 @@ public class TutorialLevel : LevelAbstract {
                 Fade();
                 break;
             case gamestate.Tractor1:
+				if (onEnterState){
+//					Debug.Log("tut07Tractor1- gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut07Tractor1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				
+				}
                 SaucerPlayer.instance.tractor = upgradelevel.medium;
                 ShowText("You can use a tractor beam by right-clicking.",1);
 
@@ -173,9 +215,15 @@ public class TutorialLevel : LevelAbstract {
                 if (ShowText("Newton's Third Law states: Every force has an equal and opposite force.")) currentState++;
                 break;
             case gamestate.Tractor6:
+
                 if (ShowText("This means that you are also pulling the ship towards the rock! You can use this to get around.")) currentState++;
                 break;
             case gamestate.Done:
+				if (onEnterState){
+//					Debug.Log("tut08Done - gameTime: " + Time.timeSinceLevelLoad);
+					Analytics.CustomEvent("tut08Done", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				
+				}
                 if (ShowText("Tutorial complete! Press ok to start a new game.")) Application.LoadLevel(2);
                 break;
             default:

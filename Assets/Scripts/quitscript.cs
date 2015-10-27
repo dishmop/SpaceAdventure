@@ -15,6 +15,6 @@ public class quitscript : MonoBehaviour {
 
     public void Quit()
     {
-        Application.Quit();
+        QuitOnEsc.singleton.TriggerQuit();
     }
 }

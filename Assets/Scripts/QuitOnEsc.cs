@@ -1,11 +1,23 @@
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 public class QuitOnEsc : MonoBehaviour {
+	public static QuitOnEsc singleton = null;
 
 	public string OnQuitLevelName;
 	public string finalQuitURL = "http://google.com";
 	
 	
+	void Start(){
+		if (Application.loadedLevelName != "menu"){
+//			Debug.Log("levelStart - levelName: " + Application.loadedLevelName);
+			Analytics.CustomEvent("levelStart", new Dictionary<string, object>
+			                      {
+				{ "levelName", Application.loadedLevelName },
+			});			
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -19,6 +31,12 @@ public class QuitOnEsc : MonoBehaviour {
 	
 	public void TriggerQuit(){
 		if (OnQuitLevelName != null && OnQuitLevelName != ""){
+//			Debug.Log ("quitGame - levelName :" + Application.loadedLevelName + ", levelTime: " + Time.timeSinceLevelLoad);
+			Analytics.CustomEvent("quitGame", new Dictionary<string, object>
+			{
+				{ "levelName", Application.loadedLevelName },
+				{ "levelTime", Time.timeSinceLevelLoad },
+			});	
 			Application.LoadLevel(OnQuitLevelName);
 		}
 		else{
@@ -44,4 +62,17 @@ public class QuitOnEsc : MonoBehaviour {
 		Application.Quit();
 		#endif
 	}
+	
+	// Use this for initialization
+	void Awake () {
+		if (singleton != null) Debug.LogError ("Error assigning singleton");
+		singleton = this;
+		
+	}
+	
+	
+	void OnDestroy(){
+		
+		singleton = null;
+	}	
 }

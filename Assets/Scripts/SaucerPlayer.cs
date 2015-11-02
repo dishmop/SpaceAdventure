@@ -2,8 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
-using UnityEngine.Analytics;
+//using System.Collections.Generic;
+//using UnityEngine.Analytics;
 
 public enum upgradelevel
 {
@@ -205,7 +205,9 @@ public class SaucerPlayer : MonoBehaviour {
     public void Upgradetractor()
     {
 //    	Debug.Log ("upgradeTractor - newLevel: " + (tractor+1).ToString());
-		Analytics.CustomEvent("upgradeTractor", new Dictionary<string, object>{ { "newLevel", (tractor+1).ToString() } });
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "upgradeTractor",  "newLevel_" + (tractor+1).ToString());
+		
+//		Analytics.CustomEvent("upgradeTractor", new Dictionary<string, object>{ { "newLevel", (tractor+1).ToString() } });
 		
         switch(tractor)
         {
@@ -246,7 +248,8 @@ public class SaucerPlayer : MonoBehaviour {
     public void Upgradecargo()
     {
 //		Debug.Log ("upgradeCargo - newLevel: " + (cargo+1).ToString());
-		Analytics.CustomEvent("upgradeCargo", new Dictionary<string, object>{ { "newLevel", (cargo+1).ToString() } });
+//		Analytics.CustomEvent("upgradeCargo", new Dictionary<string, object>{ { "newLevel", (cargo+1).ToString() } });
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "upgradeCargo",  "newLevel_" + (cargo+1).ToString());
 		
 		
 		
@@ -297,7 +300,9 @@ public class SaucerPlayer : MonoBehaviour {
     public void Upgradeshield()
     {
 //		Debug.Log ("upgradeShield - newLevel: " + (shield+1).ToString());
-		Analytics.CustomEvent("upgradeShield", new Dictionary<string, object>{ { "newLevel", (shield+1).ToString() } });
+//		Analytics.CustomEvent("upgradeShield", new Dictionary<string, object>{ { "newLevel", (shield+1).ToString() } });
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "upgradeShield",  "newLevel_" + (shield+1).ToString());
+		
 		
         switch (shield)
         {
@@ -338,11 +343,13 @@ public class SaucerPlayer : MonoBehaviour {
     {
 //		Debug.Log ("sellMinerals, amount: " + mineralvalue + ", newCashTotal: " + (Cash + mineralvalue));
 		
-		Analytics.CustomEvent("sellMinerals", new Dictionary<string, object>
-		{
-			{ "amountSold", mineralvalue },
-			{ "newCashTotal", (Cash + mineralvalue)},
-		});
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "sellMinerals",  "amountSold", mineralvalue);
+//
+//		Analytics.CustomEvent("sellMinerals", new Dictionary<string, object>
+//		{
+//			{ "amountSold", mineralvalue },
+//			{ "newCashTotal", (Cash + mineralvalue)},
+//		});
         buttonsound.Play();
 
         Cash += mineralvalue;
@@ -355,7 +362,8 @@ public class SaucerPlayer : MonoBehaviour {
     public void RepairShip()
     {
 //		Debug.Log ("upgradeRepair");
-		Analytics.CustomEvent("upgradeRepair", new Dictionary<string, object>{ { "dummy", 0 } });
+//		Analytics.CustomEvent("upgradeRepair", new Dictionary<string, object>{ { "dummy", 0 } });
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "upgradeRepair");
 		
         if(Cash >= repaircost)
         {
@@ -369,7 +377,8 @@ public class SaucerPlayer : MonoBehaviour {
     public void BuyStabilizer()
     {
 //		Debug.Log ("upgradeStabilizer");
-		Analytics.CustomEvent("upgradeStabilizer", new Dictionary<string, object>{ { "dummy", 0 } });
+//		Analytics.CustomEvent("upgradeStabilizer", new Dictionary<string, object>{ { "dummy", 0 } });
+		GoogleAnalytics.Client.SendEventHit("gameFlow", "upgradeStabilizer");
 		
         if(Cash >= 1000)
         {

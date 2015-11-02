@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;   
-using System.Collections.Generic;
-using UnityEngine.Analytics;
+//using System.Collections.Generic;
+//using UnityEngine.Analytics;
 
 //different tutorial states
 enum gamestate
@@ -44,8 +44,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Welcome1:
 				if (onEnterState){
 //					Debug.Log("tut01Welcome1 - gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut01Welcome1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
-					
+//					Analytics.CustomEvent("tut01Welcome1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut01Welcome1", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut01Welcome1");
 				
 				}
                 if (ShowText("Welcome.",2)) currentState++;
@@ -67,7 +68,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Shoot1:
 				if (onEnterState){
 //					Debug.Log("tut02Shoot1 - gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut02Shoot1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+//					Analytics.CustomEvent("tut02Shoot1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut02Shoot1", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut02Shoot1");
 				}
                 
                 if (ShowText("You can carry a certain amount of rock")) currentState++;
@@ -92,7 +95,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Momentum1:
 				if (onEnterState){
 //					Debug.Log("tut03Momentum1 - gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut03Momentum1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+//					Analytics.CustomEvent("tut03Momentum1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut03Momentum1", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut03Momentum1");
 				}
                 if (ShowText("You are giving a mass of rock a certain velocity, that is, you are giving it momentum.")) currentState++;
                 break;
@@ -108,8 +113,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Navigate1:
 				if (onEnterState){
 //					Debug.Log("tut04Navigate1 - gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut04Navigate1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
-				
+//					Analytics.CustomEvent("tut04Navigate1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut04Navigate1", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut04Navigate1");
 				}
 				
                 zoomhighlight.SetActive(false);
@@ -133,8 +139,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Navigate3:
 				if (onEnterState){
 //					Debug.Log("tut05Navigate3- gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut05Navigate3", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
-				
+					//Analytics.CustomEvent("tut05Navigate3", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut05Navigate3", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut05Navigate3");
 				}
                 if (!done)
                 {
@@ -161,7 +168,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Force1:
 				if (onEnterState){
 //					Debug.Log("tut06Force1 - gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut06Force1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				//	Analytics.CustomEvent("tut06Force1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut06Force1", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut06Force1");
 				}
 				
                 HideReset();
@@ -189,7 +198,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Tractor1:
 				if (onEnterState){
 //					Debug.Log("tut07Tractor1- gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut07Tractor1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+				//	Analytics.CustomEvent("tut07Tractor1", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut07Tractor1", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut07Tractor1");
 				
 				}
                 SaucerPlayer.instance.tractor = upgradelevel.medium;
@@ -221,8 +232,9 @@ public class TutorialLevel : LevelAbstract {
             case gamestate.Done:
 				if (onEnterState){
 //					Debug.Log("tut08Done - gameTime: " + Time.timeSinceLevelLoad);
-					Analytics.CustomEvent("tut08Done", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
-				
+//					Analytics.CustomEvent("tut08Done", new Dictionary<string, object>{ { "gameTime", Time.timeSinceLevelLoad } });
+					GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "tut08Done", "", Time.timeSinceLevelLoad);
+					GoogleAnalytics.Client.SendScreenHit("tut08Done");
 				}
                 if (ShowText("Tutorial complete! Press ok to start a new game.")) Application.LoadLevel(2);
                 break;

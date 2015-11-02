@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.Analytics;
+//using System.Collections.Generic;
+//using UnityEngine.Analytics;
 
 public class QuitOnEsc : MonoBehaviour {
 	public static QuitOnEsc singleton = null;
@@ -12,10 +12,11 @@ public class QuitOnEsc : MonoBehaviour {
 	void Start(){
 		if (Application.loadedLevelName != "menu"){
 //			Debug.Log("levelStart - levelName: " + Application.loadedLevelName);
-			Analytics.CustomEvent("levelStart", new Dictionary<string, object>
-			                      {
-				{ "levelName", Application.loadedLevelName },
-			});			
+			GoogleAnalytics.Client.SendEventHit("gameFlow", "levelStart_" + Application.loadedLevelName );
+//			Analytics.CustomEvent("levelStart", new Dictionary<string, object>
+//			                      {
+//				{ "levelName", Application.loadedLevelName },
+//			});			
 		}
 	}
 	
@@ -32,11 +33,13 @@ public class QuitOnEsc : MonoBehaviour {
 	public void TriggerQuit(){
 		if (OnQuitLevelName != null && OnQuitLevelName != ""){
 //			Debug.Log ("quitGame - levelName :" + Application.loadedLevelName + ", levelTime: " + Time.timeSinceLevelLoad);
-			Analytics.CustomEvent("quitGame", new Dictionary<string, object>
-			{
-				{ "levelName", Application.loadedLevelName },
-				{ "levelTime", Time.timeSinceLevelLoad },
-			});	
+			GoogleAnalytics.Client.SendTimedEventHit("gameFlow", "quitGame",  Application.loadedLevelName, Time.timeSinceLevelLoad);
+			
+//			Analytics.CustomEvent("quitGame", new Dictionary<string, object>
+//			{
+//				{ "levelName", Application.loadedLevelName },
+//				{ "levelTime", Time.timeSinceLevelLoad },
+//			});	
 			Application.LoadLevel(OnQuitLevelName);
 		}
 		else{
